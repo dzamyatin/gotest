@@ -1,19 +1,31 @@
 package entity
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
-	uid          string
+	uid          uuid.UUID
 	login        string
 	passwordHash []byte
 }
 
 func (u User) getId() string {
-	return u.uid
+	return u.uid.String()
 }
 
 func (u User) getLogin() string {
 	return u.login
+}
+
+func InitUser(
+	login string,
+) User {
+	return User{
+		uid:   uuid.New(),
+		login: login,
+	}
 }
 
 func (u User) checkPassword(password string) bool {

@@ -3,6 +3,7 @@ package main
 import (
 	api "app/user/api/user/proto"
 	"app/user/handler"
+	_ "app/user/lib"
 	"flag"
 	"fmt"
 	"google.golang.org/grpc"
@@ -17,7 +18,7 @@ var (
 
 func main() {
 	flag.Parse()
-	fmt.Printf("Listen: %v", *port)
+	fmt.Printf("Listen: %v \n", *port)
 
 	listener, err := net.ListenTCP("tcp", &net.TCPAddr{Port: *port})
 	if err != nil {

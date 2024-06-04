@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+package "Frontend" {
+    [VUE Frontend]
+}
+
+package "Game Client" {
+}
+
+cloud {
+
+
+
+    package "MS User" {
+
+
+        [GO User]
+        database "MySql User" {
+        }
+        [Balancer User] --> [GO User]
+        [GO User] --> [MySql User]
+
+    }
+note top of "MS User"
+        Store user data.
+        Auth server.
+        Give credentials.
+end note
+    package "MS Game" {
+        [GO Game]
+        database "Redis Game" {
+        }
+        [Balancer Game] --> [GO Game]
+        [GO Game] --> [Redis Game]
+    }
+
+    package "MS Gateaway" {
+        [Balancer Gateaway] --> [GO Gateaway]
+    }
+}
+
+GRPC --> [Balancer Gateaway]
+[VUE Frontend] --> GRPC
+[Game Client] --> GRPC
+[GO Gateaway] --> "Balancer User"
+[GO Gateaway] --> "Balancer Game"
+
+@enduml

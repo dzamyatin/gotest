@@ -12,6 +12,18 @@ type UserServer struct {
 	api.UnimplementedUserServer
 }
 
+func (s UserServer) Get(context context.Context, request *api.UserGetRequest) (*api.UserGetResponse, error) {
+	user, err := use_case.InitGetUserUseCase().Exec(use_case.GetUserInput{
+		Uid: request.Uid,
+	})
+
+	if err != nil {
+		return nil, status.Errorf(codes.NotFound, "There is no such user")
+	}
+
+	return &api.UserGetResponse{Uid: user.Uid.String(), Login: user.Login}, nil
+}
+
 func (s UserServer) Create(context context.Context, request *api.UserCreateRequest) (*api.UserCreateResponse, error) {
 	//lib.EventBusInstance.Dispatch(use_case.CreateUserInput{
 	//	Login: request.Login,
@@ -29,6 +41,6 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 	}
 
 	return &api.UserCreateResponse{
-		Uid: user.Uid(),
+		Uid: user.Uid.String(),
 	}, nil
 }

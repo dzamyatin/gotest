@@ -11,6 +11,16 @@ message UserCreateResponse {
   string uid = 1;
 }
 
+message UserGetRequest {
+  string uid = 1;
+}
+
+message UserGetResponse {
+  string uid = 1;
+  string login = 2;
+}
+
 service User {
   rpc create(UserCreateRequest) returns (UserCreateResponse);
+  rpc get(UserGetRequest) returns (UserGetResponse);
 }

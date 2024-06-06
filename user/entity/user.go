@@ -11,11 +11,15 @@ type User struct {
 	passwordHash []byte
 }
 
-func (u User) getId() string {
+func (u User) PasswordHash() []byte {
+	return u.passwordHash
+}
+
+func (u User) Uid() string {
 	return u.uid.String()
 }
 
-func (u User) getLogin() string {
+func (u User) Login() string {
 	return u.login
 }
 
@@ -28,12 +32,12 @@ func InitUser(
 	}
 }
 
-func (u User) checkPassword(password string) bool {
+func (u User) CheckPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword(u.passwordHash, []byte(password))
 
 	return err == nil
 }
 
-func (u User) setPassword(password string) {
+func (u User) SetPassword(password string) {
 	u.passwordHash, _ = bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }

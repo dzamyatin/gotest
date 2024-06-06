@@ -19,15 +19,15 @@ type CreateUserUseCase struct {
 	userRepository repository.UserRepositoryInterface
 }
 
-func (c CreateUserUseCase) execute(createUserInput CreateUserInput) error {
+func (c CreateUserUseCase) Exec(createUserInput CreateUserInput) (entity.User, error) {
 	user := entity.InitUser(createUserInput.Login)
 	err := c.userRepository.Create(user)
 
 	if err != nil {
-		return fmt.Errorf("Can't create a user: %w", err)
+		return user, fmt.Errorf("Can't create a user: %w", err)
 	}
 
-	return nil
+	return user, nil
 }
 
 func (c CreateUserUseCase) Subscribed() lib.EventInterface {
@@ -40,7 +40,7 @@ func (c CreateUserUseCase) Execute(i interface{}) {
 		fmt.Printf("Unexpected execution type: %v", i)
 	}
 
-	c.execute(input)
+	c.Exec(input)
 }
 
 func InitCreateUserUseCase() CreateUserUseCase {

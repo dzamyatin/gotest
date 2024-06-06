@@ -2,6 +2,7 @@ package repository
 
 import (
 	"app/user/entity"
+	"app/user/lib"
 )
 
 type UserRepositoryInterface interface {
@@ -13,7 +14,16 @@ type UserRepository struct {
 }
 
 func (u UserRepository) Create(user entity.User) error {
-	return nil
+	_, err := lib.DB.Exec(`INSERT INTO user
+    (uid, login, passwordHash)
+VALUES
+    (?, ?, ?)`,
+		user.Uid(),
+		user.Login(),
+		user.PasswordHash(),
+	)
+
+	return err
 }
 
 func (u UserRepository) GetById(uid string) (entity.User, error) {

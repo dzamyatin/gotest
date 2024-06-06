@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	User_Create_FullMethodName = "/api.User/create"
 	User_Get_FullMethodName    = "/api.User/get"
+	User_GetAll_FullMethodName = "/api.User/getAll"
 )
 
 // UserClient is the client API for User service.
@@ -29,6 +30,7 @@ const (
 type UserClient interface {
 	Create(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*UserCreateResponse, error)
 	Get(ctx context.Context, in *UserGetRequest, opts ...grpc.CallOption) (*UserGetResponse, error)
+	GetAll(ctx context.Context, in *UserGetAllRequest, opts ...grpc.CallOption) (*UserGetAllResponse, error)
 }
 
 type userClient struct {
@@ -57,12 +59,22 @@ func (c *userClient) Get(ctx context.Context, in *UserGetRequest, opts ...grpc.C
 	return out, nil
 }
 
+func (c *userClient) GetAll(ctx context.Context, in *UserGetAllRequest, opts ...grpc.CallOption) (*UserGetAllResponse, error) {
+	out := new(UserGetAllResponse)
+	err := c.cc.Invoke(ctx, User_GetAll_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
 	Create(context.Context, *UserCreateRequest) (*UserCreateResponse, error)
 	Get(context.Context, *UserGetRequest) (*UserGetResponse, error)
+	GetAll(context.Context, *UserGetAllRequest) (*UserGetAllResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -75,6 +87,9 @@ func (UnimplementedUserServer) Create(context.Context, *UserCreateRequest) (*Use
 }
 func (UnimplementedUserServer) Get(context.Context, *UserGetRequest) (*UserGetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedUserServer) GetAll(context.Context, *UserGetAllRequest) (*UserGetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -125,6 +140,24 @@ func _User_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserGetAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_GetAll_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetAll(ctx, req.(*UserGetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -139,6 +172,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "get",
 			Handler:    _User_Get_Handler,
+		},
+		{
+			MethodName: "getAll",
+			Handler:    _User_GetAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

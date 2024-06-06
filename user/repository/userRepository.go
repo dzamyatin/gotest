@@ -9,6 +9,7 @@ import (
 type UserRepositoryInterface interface {
 	Create(user entity.User) error
 	GetById(uid string) (entity.User, error)
+	GetAll() ([]entity.User, error)
 }
 
 type UserRepository struct {
@@ -42,6 +43,26 @@ LIMIT 1
 	}
 
 	return user, nil
+}
+
+func (u UserRepository) GetAll() ([]entity.User, error) {
+	rows, err := lib.DB.Query(`SELECT uid, login, passwordHash
+FROM user
+`,
+	)
+
+	if err != nil {
+		return []entity.User{}, err
+	}
+
+	var users []entity.User
+	for rows.Next() {
+		user := entity.User{}
+		err = rows.Scan(&user.Uid, &user.Login, &user.PasswordHash)
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 func InitUserRepository() UserRepositoryInterface {

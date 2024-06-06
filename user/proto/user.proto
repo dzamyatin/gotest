@@ -20,7 +20,14 @@ message UserGetResponse {
   string login = 2;
 }
 
+message UserGetAllRequest {}
+
+message UserGetAllResponse {
+  repeated UserGetResponse users = 1;
+}
+
 service User {
   rpc create(UserCreateRequest) returns (UserCreateResponse);
   rpc get(UserGetRequest) returns (UserGetResponse);
+  rpc getAll(UserGetAllRequest) returns (UserGetAllResponse);
 }

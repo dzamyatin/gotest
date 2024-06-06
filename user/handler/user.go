@@ -37,10 +37,29 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 
 	if err != nil {
 		return nil,
-			status.Errorf(codes.Unimplemented, "method Create not implemented")
+			status.Errorf(codes.Internal, "Not found")
 	}
 
 	return &api.UserCreateResponse{
 		Uid: user.Uid.String(),
 	}, nil
+}
+
+func (s UserServer) GetAll(context context.Context, request *api.UserGetAllRequest) (*api.UserGetAllResponse, error) {
+	response := api.UserGetAllResponse{}
+	users, err := use_case.InitGetAllUsersUseCase().Exec()
+
+	if err != nil {
+		return nil,
+			status.Errorf(codes.Internal, "Internal error")
+	}
+
+	for _, v := range users {
+		response.Users = append(response.Users, &api.UserGetResponse{
+			Uid:   v.Uid.String(),
+			Login: v.Login,
+		})
+	}
+
+	return &response, nil
 }

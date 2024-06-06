@@ -1,6 +1,8 @@
 package repository
 
-import "app/user/entity"
+import (
+	"app/user/entity"
+)
 
 type UserRepositoryInterface interface {
 	Create(user entity.User) error
@@ -11,8 +13,7 @@ type UserRepository struct {
 }
 
 func (u UserRepository) Create(user entity.User) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (u UserRepository) GetById(uid string) (entity.User, error) {

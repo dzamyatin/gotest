@@ -2,7 +2,7 @@ package handler
 
 import (
 	api "app/user/api/user/proto"
-	"app/user/use_case"
+	use_case2 "app/user/internal/use_case"
 	"context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -13,7 +13,7 @@ type UserServer struct {
 }
 
 func (s UserServer) Get(context context.Context, request *api.UserGetRequest) (*api.UserGetResponse, error) {
-	user, err := use_case.InitGetUserUseCase().Exec(use_case.GetUserInput{
+	user, err := use_case2.InitGetUserUseCase().Exec(use_case2.GetUserInput{
 		Uid: request.Uid,
 	})
 
@@ -29,8 +29,8 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 	//	Login: request.Login,
 	//})
 
-	user, err := use_case.InitCreateUserUseCase().Exec(
-		use_case.CreateUserInput{
+	user, err := use_case2.InitCreateUserUseCase().Exec(
+		use_case2.CreateUserInput{
 			Login: request.Login,
 		},
 	)
@@ -47,7 +47,7 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 
 func (s UserServer) GetAll(context context.Context, request *api.UserGetAllRequest) (*api.UserGetAllResponse, error) {
 	response := api.UserGetAllResponse{}
-	users, err := use_case.InitGetAllUsersUseCase().Exec()
+	users, err := use_case2.InitGetAllUsersUseCase().Exec()
 
 	if err != nil {
 		return nil,

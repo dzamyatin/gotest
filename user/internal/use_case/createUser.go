@@ -1,9 +1,9 @@
 package use_case
 
 import (
-	"app/user/entity"
-	"app/user/lib"
-	"app/user/repository"
+	"app/user/internal/entity"
+	"app/user/internal/lib"
+	"app/user/internal/repository"
 	"fmt"
 )
 

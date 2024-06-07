@@ -11,18 +11,6 @@ type User struct {
 	PasswordHash []byte
 }
 
-//func (u User) PasswordHash() []byte {
-//	return u.passwordHash
-//}
-//
-//func (u User) Uid() string {
-//	return u.uid.String()
-//}
-//
-//func (u User) Login() string {
-//	return u.login
-//}
-
 func InitUser(
 	login string,
 ) User {

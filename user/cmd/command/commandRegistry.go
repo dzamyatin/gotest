@@ -1,7 +1,7 @@
 package command
 
 import (
-	"app/user/exception"
+	"app/user/internal/exception"
 )
 
 type Arg struct {

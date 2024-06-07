@@ -1,7 +1,7 @@
 package command
 
 import (
-	"app/user/lib"
+	"app/user/internal/lib"
 	"fmt"
 	"github.com/golang-migrate/migrate"
 	_ "github.com/golang-migrate/migrate/source/file"

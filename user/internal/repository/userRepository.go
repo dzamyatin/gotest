@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"app/user/entity"
-	"app/user/lib"
+	"app/user/internal/entity"
+	"app/user/internal/lib"
 	"fmt"
 )
 

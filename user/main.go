@@ -2,8 +2,8 @@ package main
 
 import (
 	api "app/user/api/user/proto"
-	"app/user/handler"
-	_ "app/user/lib"
+	"app/user/internal/handler"
+	_ "app/user/internal/lib"
 	"flag"
 	"fmt"
 	"google.golang.org/grpc"

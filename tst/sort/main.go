@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	rand2 "math/rand"
+	"sync"
 	"time"
 )
 
@@ -16,15 +17,17 @@ func main() {
 	//return
 
 	sorts := map[string]SortCallback{
-		"SLOW":  slowSort,
-		"MERGE": quickSort,
+		"SLOW":        slowSort,
+		"MERGE":       quickSort,
+		"Async MERGE": quickSortAsync, //have better performance on arrays large then 100000 elements
 	}
 
 	for k, v := range sorts {
 		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
 		t := time.Now()
 
-		testSort(v, 20, 100)
+		//testSort(v, 20, 100)
+		testSort(v, 20, 200)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
 	}
@@ -104,17 +107,40 @@ func quickSort(base []int, order SortOrder) []int {
 
 	left, right := makeParts(base, order)
 
-	//if len(left) > 1 && len(right) != 0 {
-	//	left = quickSort(left, order)
-	//}
-	//if len(right) > 1 && len(left) != 0 {
-	//	right = quickSort(right, order)
-	//}
-
 	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
 		return append(
 			quickSort(left, order),
 			quickSort(right, order)...,
+		)
+	}
+
+	return append(left, right...)
+}
+
+func quickSortAsync(base []int, order SortOrder) []int {
+
+	left, right := makeParts(base, order)
+
+	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
+
+		wg := sync.WaitGroup{}
+
+		wg.Add(2)
+
+		var qSortA []int
+		go func() {
+			defer wg.Done()
+			qSortA = quickSortAsync(left, order)
+		}()
+		var qSortB []int
+		go func() {
+			defer wg.Done()
+			qSortB = quickSortAsync(right, order)
+		}()
+		wg.Wait()
+		return append(
+			qSortA,
+			qSortB...,
 		)
 	}
 

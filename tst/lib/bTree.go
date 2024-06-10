@@ -4,6 +4,23 @@ type TreeNode struct {
 	leftLeaf  *TreeNode
 	rightLeaf *TreeNode
 	value     int
+	count     int
+}
+
+func NewTreeNode(value int) *TreeNode {
+	return &TreeNode{
+		value: value,
+		count: 1,
+	}
+}
+
+func (t *TreeNode) GetValues() []int {
+	res := make([]int, t.count)
+	for k, _ := range res {
+		res[k] = t.value
+	}
+
+	return res
 }
 
 func (t *TreeNode) Sort(order SortOrder) (res []int) {
@@ -13,7 +30,7 @@ func (t *TreeNode) Sort(order SortOrder) (res []int) {
 			res = append(res, t.leftLeaf.Sort(order)...)
 		}
 
-		res = append(res, t.value)
+		res = append(res, t.GetValues()...)
 
 		if t.rightLeaf != nil {
 			res = append(res, t.rightLeaf.Sort(order)...)
@@ -23,7 +40,7 @@ func (t *TreeNode) Sort(order SortOrder) (res []int) {
 			res = append(res, t.rightLeaf.Sort(order)...)
 		}
 
-		res = append(res, t.value)
+		res = append(res, t.GetValues()...)
 
 		if t.leftLeaf != nil {
 			res = append(res, t.leftLeaf.Sort(order)...)
@@ -34,7 +51,7 @@ func (t *TreeNode) Sort(order SortOrder) (res []int) {
 }
 
 func (t *TreeNode) Bypass() (res []int) {
-	res = append(res, t.value)
+	res = append(res, t.GetValues()...)
 	if t.leftLeaf != nil {
 		res = append(res, t.leftLeaf.Bypass()...)
 	}
@@ -48,6 +65,7 @@ func (t *TreeNode) Bypass() (res []int) {
 
 func (t *TreeNode) AddLeaf(node *TreeNode) {
 	if node.value == t.value {
+		t.count++
 		return
 	}
 
@@ -96,7 +114,7 @@ func (t *TreeNode) SearchLower(search int) (res []int) {
 
 func CreateBTree(values []int) (root *TreeNode) {
 	for _, v := range values {
-		node := &TreeNode{value: v}
+		node := NewTreeNode(v)
 		if root == nil {
 			root = node
 		}

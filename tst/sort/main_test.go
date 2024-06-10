@@ -1,19 +1,20 @@
 package main
 
 import (
+	"app/tst/lib"
 	"reflect"
 	"testing"
 )
 
 func TestQuickSort(t *testing.T) {
 
-	sorts := []SortOrder{ASC, DESC}
+	sorts := []lib.SortOrder{lib.ASC, lib.DESC}
 
 	for _, s := range sorts {
 		for i := 0; i < 100; i++ {
-			base := createRandList(i, 1000)
-			resA := quickSort(base, s)
-			resB := slowSort(base, s)
+			base := lib.CreateRandList(i, 1000)
+			resA := lib.QuickSort(base, s)
+			resB := lib.SlowSort(base, s)
 
 			if resA == nil {
 				resA = make([]int, 0)

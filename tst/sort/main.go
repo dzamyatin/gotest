@@ -1,9 +1,8 @@
 package main
 
 import (
+	"app/tst/lib"
 	"fmt"
-	rand2 "math/rand"
-	"sync"
 	"time"
 )
 
@@ -17,9 +16,9 @@ func main() {
 	//return
 
 	sorts := map[string]SortCallback{
-		"SLOW":        slowSort,
-		"MERGE":       quickSort,
-		"Async MERGE": quickSortAsync, //have better performance on arrays large then 100000 elements
+		"SLOW":        lib.SlowSort,
+		"MERGE":       lib.QuickSort,
+		"Async MERGE": lib.QuickSortAsync, //have better performance on arrays large then 100000 elements
 	}
 
 	for k, v := range sorts {
@@ -34,7 +33,7 @@ func main() {
 
 }
 
-type SortCallback func(base []int, order SortOrder) []int
+type SortCallback func(base []int, order lib.SortOrder) []int
 
 func testSort(sortCallback SortCallback, step int, elemNumber int) {
 	size := 15
@@ -44,11 +43,11 @@ func testSort(sortCallback SortCallback, step int, elemNumber int) {
 		ce := i * step
 		k := i
 
-		test := createRandList(ce, 1000)
+		test := lib.CreateRandList(ce, 1000)
 
 		start := time.Now()
 
-		sortCallback(test, DESC)
+		sortCallback(test, lib.DESC)
 
 		end := time.Now()
 
@@ -94,159 +93,4 @@ func draw(points []int, size int) {
 		}
 		fmt.Print("\n")
 	}
-}
-
-func quickSort(base []int, order SortOrder) []int {
-	// count = 3
-	// 5, 3, 0
-	// max = 5
-	// min = 0
-	// middle = (max - min) / count
-	// 		  =  5  -  0 = 5 / 2 = 2.5
-	// if v > middle => left else => right
-
-	left, right := makeParts(base, order)
-
-	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
-		return append(
-			quickSort(left, order),
-			quickSort(right, order)...,
-		)
-	}
-
-	return append(left, right...)
-}
-
-func quickSortAsync(base []int, order SortOrder) []int {
-
-	left, right := makeParts(base, order)
-
-	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
-
-		wg := sync.WaitGroup{}
-
-		wg.Add(2)
-
-		var qSortA []int
-		go func() {
-			defer wg.Done()
-			qSortA = quickSortAsync(left, order)
-		}()
-		var qSortB []int
-		go func() {
-			defer wg.Done()
-			qSortB = quickSortAsync(right, order)
-		}()
-		wg.Wait()
-		return append(
-			qSortA,
-			qSortB...,
-		)
-	}
-
-	return append(left, right...)
-}
-
-var metric = 0
-
-func makeParts(list []int, order SortOrder) (left []int, right []int) {
-	metric++
-	var minimum int
-	var maximum int
-
-	for k, v := range list {
-		if k == 0 {
-			minimum = v
-			maximum = v
-		}
-
-		if v < minimum {
-			minimum = v
-		}
-
-		if v > maximum {
-			maximum = v
-		}
-	}
-
-	middle := minimum + ((maximum - minimum) / 2)
-	for _, v := range list {
-
-		var isBetter bool
-		switch order {
-		case ASC:
-			isBetter = v > middle
-		case DESC:
-			isBetter = v <= middle
-		default:
-			isBetter = v < middle
-		}
-
-		if isBetter {
-			right = append(right, v)
-			continue
-		}
-		left = append(left, v)
-	}
-
-	return
-}
-
-type SortOrder int8
-
-const (
-	ASC SortOrder = iota
-	DESC
-)
-
-func slowSort(base []int, order SortOrder) []int {
-	var containerValue int
-	var containerKey int
-
-	skipList := make(map[int]interface{})
-	result := make([]int, len(base))
-
-	for index, _ := range result {
-		firstElement := true
-
-		for k, v := range base {
-			_, ok := skipList[k]
-
-			if ok {
-				continue
-			}
-
-			var isBetter bool
-			switch order {
-			case ASC:
-				isBetter = v < containerValue
-			case DESC:
-				isBetter = v > containerValue
-			default:
-				isBetter = v < containerValue
-			}
-
-			if isBetter || firstElement {
-				containerValue = v
-				containerKey = k
-			}
-
-			firstElement = false
-		}
-
-		skipList[containerKey] = nil
-		result[index] = containerValue
-	}
-
-	return result
-}
-
-func createRandList(count int, border int) []int {
-	res := make([]int, count)
-
-	for k, _ := range res {
-		res[k] = rand2.Intn(border)
-	}
-
-	return res
 }

@@ -6,3 +6,11 @@ const (
 	ASC SortOrder = iota
 	DESC
 )
+
+func BTreeSortAdapter(base []int, order SortOrder) []int {
+	bTree := CreateBTree(base)
+	if bTree == nil {
+		return []int{}
+	}
+	return bTree.Sort(order)
+}

@@ -16,17 +16,18 @@ func main() {
 	//return
 
 	sorts := map[string]SortCallback{
-		"SLOW":        lib.SlowSort,
+		//"SLOW":        lib.SlowSort,
 		"MERGE":       lib.QuickSort,
 		"Async MERGE": lib.QuickSortAsync, //have better performance on arrays large then 100000 elements
+		"BTree":       lib.BTreeSortAdapter,
 	}
 
 	for k, v := range sorts {
 		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
 		t := time.Now()
 
-		//testSort(v, 20, 100)
-		testSort(v, 20, 200)
+		testSort(v, 2000, 200)
+		//testSort(v, 20, 200)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
 	}

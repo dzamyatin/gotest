@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	sorts := map[string]SortCallback{
 		"SLOW":  slowSort,
 		"MERGE": quickSort,
@@ -17,7 +16,7 @@ func main() {
 		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
 		t := time.Now()
 
-		testSort(v, 1000, 200)
+		testSort(v, 100, 200)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
 	}
@@ -97,14 +96,14 @@ func quickSort(base []int, order SortOrder) []int {
 
 	left, right := makeParts(base, order)
 
-	if (len(left)+len(right) > 3) && len(left) != 0 && len(right) != 0 {
+	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
 		return append(
 			quickSort(left, order),
 			quickSort(right, order)...,
 		)
 	}
 
-	return slowSort(append(left, right...), order)
+	return append(left, right...)
 }
 
 var metric = 0

@@ -19,7 +19,7 @@ func TestBTreeSort(t *testing.T) {
 			continue
 		}
 
-		if v >= *prev {
+		if v <= *prev {
 			prev = &v
 			continue
 		}

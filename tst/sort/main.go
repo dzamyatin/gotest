@@ -17,9 +17,6 @@ func main() {
 		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
 		t := time.Now()
 
-		//slowSort(test, DESC)
-		//quickSort(test, DESC)
-
 		testSort(v, 1000, 200)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
@@ -31,12 +28,6 @@ type SortCallback func(base []int, order SortOrder) []int
 
 func testSort(sortCallback SortCallback, step int, elemNumber int) {
 	size := 15
-
-	//countElements := []int{
-	//10, 20, 40, 50, 100, 200, 400, 800,
-	//1600, 3200, 6400,
-	//12800, 25600,
-	//}
 
 	points := make([]int, elemNumber)
 	for i := 0; i < elemNumber; i++ {
@@ -58,9 +49,6 @@ func testSort(sortCallback SortCallback, step int, elemNumber int) {
 
 	tst := print(points, size)
 	draw(print(tst, size), size)
-
-	//log.Println(tst)
-	//log.Println(points)
 }
 
 func print(points []int, sizeLines int) []int {
@@ -97,34 +85,6 @@ func draw(points []int, size int) {
 		fmt.Print("\n")
 	}
 }
-
-//func main() {
-//	//size := 100
-//	//points := []int{1, 2, 3}
-//	//
-//	//fmt.Println(
-//	//	print(points, size),
-//	//)
-//	//
-//	//draw(points, size)
-//	//return
-//
-//	var res []int
-//
-//	//test := []int{3, 1, 2, 5, 9, 2}
-//	test := createRandList(10, 100)
-//
-//	start := time.Now()
-//	res = slowSort(test, DESC)
-//	//res = quickSort(test, DESC)
-//	end := time.Now()
-//
-//	elapsed := end.Sub(start)
-//
-//	fmt.Println(res)
-//	fmt.Printf("Elapsed time: %s\n", elapsed)
-//	fmt.Printf("Metric: %v\n", metric)
-//}
 
 func quickSort(base []int, order SortOrder) []int {
 	// count = 3
@@ -250,112 +210,3 @@ func createRandList(count int, border int) []int {
 
 	return res
 }
-
-//
-//func main() {
-//	//3 ^ (4 ^ 2) = 3 ^ 16 = 43046721.
-//	list := []int{3, 4, 2}
-//	//list := []int64{499942, 898102, 846073}
-//	//list := []int{}
-//
-//	//res := int(0)
-//	tst := 0
-//	if len(list) != 0 {
-//		//isA := true
-//		maxIndex := len(list) - 1
-//		var baseA int
-//		var baseB int
-//		for i := maxIndex; i >= 0; i-- {
-//			//if isA {
-//			if maxIndex == i {
-//				baseB = list[i]
-//				//isA = false
-//				continue
-//			}
-//
-//			//isA = true
-//			baseA = list[i]
-//
-//			//fmt.Printf("%v ^ %v = %v", baseA, baseB, math.Pow(float64(baseA), float64(baseB)))
-//			tst = calc(baseA, baseB)
-//			//fmt.Println(" =>", tst)
-//
-//			baseB = tst
-//		}
-//	} else {
-//		//res = 1
-//	}
-//
-//	fmt.Println(" =>", tst)
-//	fmt.Println("---------")
-//}
-//
-//func calc(baseA int, baseB int) int {
-//	lastDigitA := baseA % 10
-//	//lastDigitB := baseB % 10
-//
-//	exp := 4
-//	if baseB%4 != 0 {
-//		exp = baseB % 4
-//	}
-//
-//	idigit := math.Pow(float64(lastDigitA), float64(exp))
-//
-//	return int(idigit) % 10
-//}
-
-//func main() {
-//	//3 ^ (4 ^ 2) = 3 ^ 16 = 43046721.
-//	list := []int{3, 4, 2}
-//	//list := []int64{499942, 898102, 846073}
-//	//list := []int{}
-//
-//	res := int(0)
-//
-//	if len(list) != 0 {
-//		maxIndex := len(list) - 1
-//		for i := maxIndex; i >= 0; i-- {
-//			val := list[i]
-//			if i == maxIndex {
-//				res = val
-//				fmt.Println(res)
-//				continue
-//			}
-//			fmt.Printf("%v ^ %v = ", val, res)
-//			res = int(math.Pow(float64(val), float64(res)))
-//			fmt.Println(res)
-//		}
-//	} else {
-//		res = 1
-//	}
-//
-//	fmt.Println("---------")
-//	fmt.Println(res)
-//	fmt.Println(res % 10)
-//}
-
-//func main() {
-//	//3 ^ (4 ^ 2) = 3 ^ 16 = 43046721.
-//	//list := []int{3, 4, 2}
-//	list := []int64{499942, 898102, 846073}
-//	//list := []int{}
-//
-//	res := int64(0)
-//
-//	if len(list) != 0 {
-//		maxIndex := len(list) - 1
-//		for i := maxIndex; i >= 0; i-- {
-//			val := list[i]
-//			if i == maxIndex {
-//				res = val
-//				continue
-//			}
-//			res = int64(math.Pow(float64(val), float64(res)))
-//		}
-//	} else {
-//		res = 1
-//	}
-//
-//	fmt.Println(res)
-//	fmt.Println(res % 10)
-//}

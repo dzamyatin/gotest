@@ -6,21 +6,26 @@ import (
 	"time"
 )
 
+type SortVariant struct {
+	title    string
+	callback SortCallback
+}
+
 func main() {
-	sorts := map[string]SortCallback{
-		"SLOW":        lib.SlowSort,
-		"MERGE":       lib.QuickSort,
-		"Async MERGE": lib.QuickSortAsync, //have better performance on arrays large then 100000 elements
-		"BTree":       lib.BTreeSortAdapter,
-		"Async BTree": lib.BTreeSortAsyncAdapter,
+	sorts := []SortVariant{
+		{"SLOW", lib.SlowSort},
+		{"MERGE", lib.QuickSort},
+		{"Async MERGE", lib.QuickSortAsync}, //have better performance then MERGE on arrays large then 100000 elements
+		{"BTree", lib.BTreeSortAdapter},
+		{"Async BTree", lib.BTreeSortAsyncAdapter}, //have better performance in all cases
 	}
 
-	for k, v := range sorts {
-		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
+	for _, v := range sorts {
+		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", v.title)
 		t := time.Now()
 
 		//testSort(v, 100000000, 2)
-		testSort(v, 20, 200)
+		testSort(v.callback, 20, 200)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
 	}

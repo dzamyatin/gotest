@@ -7,14 +7,6 @@ import (
 )
 
 func main() {
-	//fmt.Println(quickSort(
-	//	//[]int{3, 7, 2, 1, 9, 0, 0, 3, 5},
-	//	//[]int{494, 634, 421, 122, 640, 422, 582, 372, 661},
-	//	[]int{891, 892, 779, 522, 435, 310},
-	//	DESC,
-	//))
-	//return
-
 	sorts := map[string]SortCallback{
 		"SLOW":        lib.SlowSort,
 		"MERGE":       lib.QuickSort,

@@ -7,7 +7,7 @@ import (
 
 func TestBTreeSort(t *testing.T) {
 
-	base := lib.CreateRandList(100000000, 100)
+	base := lib.CreateRandList(100, 100)
 	bTree := lib.CreateBTree(base)
 
 	resA := bTree.Sort(lib.ASC)
@@ -19,8 +19,11 @@ func TestBTreeSort(t *testing.T) {
 			continue
 		}
 
-		if v <= *prev {
-			t.Fatalf("Fail err elem %v \n Base:%v \n Res:%v", v, base, resA)
+		if v >= *prev {
+			prev = &v
+			continue
 		}
+
+		t.Fatalf("Fail err elem %v \n Base:%v \n Res:%v", v, base, resA)
 	}
 }

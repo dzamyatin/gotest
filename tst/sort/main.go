@@ -7,6 +7,14 @@ import (
 )
 
 func main() {
+	//fmt.Println(quickSort(
+	//	//[]int{3, 7, 2, 1, 9, 0, 0, 3, 5},
+	//	//[]int{494, 634, 421, 122, 640, 422, 582, 372, 661},
+	//	[]int{891, 892, 779, 522, 435, 310},
+	//	DESC,
+	//))
+	//return
+
 	sorts := map[string]SortCallback{
 		"SLOW":  slowSort,
 		"MERGE": quickSort,
@@ -96,6 +104,13 @@ func quickSort(base []int, order SortOrder) []int {
 
 	left, right := makeParts(base, order)
 
+	//if len(left) > 1 && len(right) != 0 {
+	//	left = quickSort(left, order)
+	//}
+	//if len(right) > 1 && len(left) != 0 {
+	//	right = quickSort(right, order)
+	//}
+
 	if (len(left)+len(right) > 2) && len(left) != 0 && len(right) != 0 {
 		return append(
 			quickSort(left, order),
@@ -128,7 +143,7 @@ func makeParts(list []int, order SortOrder) (left []int, right []int) {
 		}
 	}
 
-	middle := (maximum - minimum) / 2
+	middle := minimum + ((maximum - minimum) / 2)
 	for _, v := range list {
 
 		var isBetter bool
@@ -136,7 +151,7 @@ func makeParts(list []int, order SortOrder) (left []int, right []int) {
 		case ASC:
 			isBetter = v > middle
 		case DESC:
-			isBetter = v < middle
+			isBetter = v <= middle
 		default:
 			isBetter = v < middle
 		}

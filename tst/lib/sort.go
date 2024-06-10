@@ -14,3 +14,11 @@ func BTreeSortAdapter(base []int, order SortOrder) []int {
 	}
 	return bTree.Sort(order)
 }
+
+func BTreeSortAsyncAdapter(base []int, order SortOrder) []int {
+	bTree := CreateBTree(base)
+	if bTree == nil {
+		return []int{}
+	}
+	return bTree.AsyncSort(order)
+}

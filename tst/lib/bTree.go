@@ -1,5 +1,7 @@
 package lib
 
+import "sync"
+
 type TreeNode struct {
 	leftLeaf  *TreeNode
 	rightLeaf *TreeNode
@@ -45,6 +47,48 @@ func (t *TreeNode) Sort(order SortOrder) (res []int) {
 		if t.leftLeaf != nil {
 			res = append(res, t.leftLeaf.Sort(order)...)
 		}
+	}
+
+	return
+}
+
+func (t *TreeNode) AsyncSort(order SortOrder) (res []int) {
+
+	wg := sync.WaitGroup{}
+
+	if order == ASC {
+		var resA []int
+		if t.leftLeaf != nil {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				resA = t.leftLeaf.Sort(order)
+			}()
+		}
+
+		var resB []int
+		if t.rightLeaf != nil {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				resB = t.rightLeaf.Sort(order)
+			}()
+		}
+
+		wg.Wait()
+		res = append(res, resA...)
+		res = append(res, t.GetValues()...)
+		res = append(res, resB...)
+	} else {
+		//if t.rightLeaf != nil {
+		//	res = append(res, t.rightLeaf.Sort(order)...)
+		//}
+		//
+		//res = append(res, t.GetValues()...)
+		//
+		//if t.leftLeaf != nil {
+		//	res = append(res, t.leftLeaf.Sort(order)...)
+		//}
 	}
 
 	return

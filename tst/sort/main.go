@@ -24,7 +24,7 @@ func main() {
 		fmt.Printf("\n ------------------------------------------- \n Type: %v \n", k)
 		t := time.Now()
 
-		testSort(v, 100, 200)
+		testSort(v, 20, 100)
 
 		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
 	}
@@ -38,7 +38,7 @@ func testSort(sortCallback SortCallback, step int, elemNumber int) {
 
 	points := make([]int, elemNumber)
 	for i := 0; i < elemNumber; i++ {
-		ce := i + step
+		ce := i * step
 		k := i
 
 		test := createRandList(ce, 1000)

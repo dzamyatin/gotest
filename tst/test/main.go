@@ -1,36 +1,35 @@
 package main
 
 import (
-	"app/tst/lib"
+	"context"
 	"fmt"
-	"sync"
 	"time"
 )
 
 func main() {
-	wg := sync.WaitGroup{}
-	mx := sync.Mutex{}
-	s := lib.NewSemaphoreSync(5)
+	ctx := context.Background()
 
-	tst := 0
-	for i := 0; i < 10; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+	thingCtx, _ := context.WithTimeout(ctx, 2*time.Second)
 
-			s.Lock()
-			defer s.Release()
+	fmt.Println(
+		doTheThing(thingCtx),
+	)
+}
 
-			mx.Lock()
-			tst++
-			fmt.Printf("Test %v\n\n", tst)
-			mx.Unlock()
+func doTheThing(ctx context.Context) int {
+	ch := make(chan int)
 
-			time.Sleep(time.Second * 5)
-		}()
+	go func() {
+		time.Sleep(time.Second * 5)
+		ch <- 1
+	}()
+
+	select {
+	case v := <-ch:
+		return v
+	case <-ctx.Done():
+		return 0
 	}
-
-	wg.Wait()
 }
 
 //Task: context if done  == 0 else res

@@ -34,7 +34,11 @@ func main() {
 
 	//fmt.Println(retErr() == nil)
 	//fmt.Println(errors.Is(retErr(), MyErr{}))
+
 	fmt.Println(errors.Is(CustomErr{err: MyErr{}}, MyErr{}))
+
+	var e error
+	fmt.Println(errors.As(CustomErr{err: MyErr{}}, &e))
 
 	//ch := make(chan int, 1)
 	//<-ch //deadlock

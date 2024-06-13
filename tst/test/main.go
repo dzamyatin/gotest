@@ -1,30 +1,21 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-)
+import "log"
 
 func main() {
-	test := map[string]int{
-		"Hella":  0,
-		"Orr":    0,
-		"aweawe": 0,
+
+	ch := make(chan int, 1)
+
+	ch <- 1
+
+	close(ch)
+
+	for v := range ch {
+		log.Println(v)
 	}
 
-	for i := 0; i < 100; i++ {
-		var j int32 = 0
-		tgt := rand.Int31n(int32(len(test)))
-		for k := range test {
-			if tgt == j {
-				test[k] += 1
-				break
+	log.Println("--")
 
-			}
-			j++
-		}
-	}
-
-	fmt.Println(test)
-	fmt.Println(len(test))
+	tst, ok := <-ch
+	log.Println(tst, ok)
 }

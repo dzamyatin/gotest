@@ -3,34 +3,23 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println(test(2))
-	fmt.Println(test2(2).(int))
-}
+	//sl := []int(nil)
+	//nsl := append([]int{}, sl...)
 
-type Num interface {
-	int | float32 | float64 | int32 | int64 | int8
-}
+	//var tst []int
+	tst := make([]int, 0, 10)
 
-func test[T Num](n T) T {
-	var x interface{}
-	x = n
+	nsl := append(
+		tst,
+		1,
+	)
 
-	switch x.(type) {
-	case int:
-		return 1
-	}
+	nsl = append(nsl, 2)
+	//nsl = append(nsl, 3)
+	nsl = append(nsl, 4)
+	//nsl = append(nsl, 5)
 
-	return n
-}
-
-func test2(n interface{}) interface{} {
-	var x interface{}
-	x = n
-
-	switch x.(type) {
-	case int:
-		return 1
-	}
-
-	return n
+	fmt.Println(nsl)
+	fmt.Println(len(nsl))
+	fmt.Println(cap(nsl))
 }

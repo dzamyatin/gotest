@@ -127,7 +127,7 @@ func main() {
 
 	conv := lib.ByteToStringConverter{}
 
-	bt := " Привет! Как дела? 😀 Norn, sam kak&? 123"
+	bt := " Привет! Как дела? 😀 Norn, sam kak&? 1234 Е"
 	for _, v := range []byte(bt) {
 		//fmt.Println(v)
 		//fmt.Println(string([]byte{v}))

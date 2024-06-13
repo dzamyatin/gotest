@@ -52,12 +52,14 @@ func (t *TreeNode) Sort(order SortOrder) (res []int) {
 	return
 }
 
-func (t *TreeNode) AsyncSort(order SortOrder) (res []int) {
+func (t *TreeNode) AsyncSort(order SortOrder) []int {
 
 	wg := sync.WaitGroup{}
 
+	var resA []int
+	var resB []int
 	if order == ASC {
-		var resA []int
+
 		if t.leftLeaf != nil {
 			wg.Add(1)
 			go func() {
@@ -66,7 +68,6 @@ func (t *TreeNode) AsyncSort(order SortOrder) (res []int) {
 			}()
 		}
 
-		var resB []int
 		if t.rightLeaf != nil {
 			wg.Add(1)
 			go func() {
@@ -76,9 +77,6 @@ func (t *TreeNode) AsyncSort(order SortOrder) (res []int) {
 		}
 
 		wg.Wait()
-		res = append(res, resA...)
-		res = append(res, t.GetValues()...)
-		res = append(res, resB...)
 	} else {
 		//if t.rightLeaf != nil {
 		//	res = append(res, t.rightLeaf.Sort(order)...)
@@ -91,7 +89,13 @@ func (t *TreeNode) AsyncSort(order SortOrder) (res []int) {
 		//}
 	}
 
-	return
+	res := make([]int, 0, len(resA)+len(t.GetValues())+len(resB))
+
+	res = append(res, resA...)
+	res = append(res, t.GetValues()...)
+	res = append(res, resB...)
+
+	return res
 }
 
 func (t *TreeNode) Bypass() (res []int) {

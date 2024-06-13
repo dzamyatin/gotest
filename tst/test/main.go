@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/tst/lib"
 	"fmt"
 )
 
@@ -49,15 +50,92 @@ func main() {
 	//deferFunc()
 	//fmt.Println(panicFunc())
 
-	s := siren{
-		sval: 1,
-		graps: graps{
-			gval: 2,
-		},
+	//s := siren{
+	//	sval: 1,
+	//	graps: graps{
+	//		gval: 2,
+	//	},
+	//}
+	//fmt.Println(
+	//	s.test(),
+	//)
+
+	//fmt.Println(
+	//	strconv.Itoa(97),
+	//)
+	//
+	//fmt.Println(
+	//	strconv.Atoi("88"),
+	//)
+	//
+	//fmt.Println([]rune("a")[0] == 97)
+	//
+	//fmt.Println('Й')
+	//fmt.Println([]rune("Йух"))
+	//
+	//fmt.Println("----")
+	//for _, v := range "Русь великая №123" {
+	//	fmt.Println(v)
+	//}
+	//
+	//fmt.Println("----")
+	//for _, v := range []byte("Русь великая №123") {
+	//	fmt.Println(v)
+	//}
+
+	fmt.Println("----")
+	//fmt.Println(string([]byte{208, 160, 209, 131, 209, 129}))
+	//fmt.Println(string([]byte{209, 131, 209, 129}))
+
+	//conv := lib.ByteToStringConverter{}
+	//conv.Add('H')
+	//conv.Add('e')
+	//conv.Add('l')
+	//conv.Add('l')
+	//conv.Add('o')
+	//conv.Add(':')
+	//conv.Add(208)
+	//conv.Add(160)
+	//conv.Add(209)
+	//conv.Add(131)
+	//conv.Add(209)
+	//conv.Add(129)
+	//conv.Add('_')
+	//conv.Add('1')
+	//conv.Add('2')
+	//conv.Add('3')
+	//conv.Add('4')
+	//conv.Add('5')
+	//conv.Add('6')
+	//conv.Add('7')
+	//conv.Add('8')
+	//conv.Add('9')
+
+	//fmt.Println("+++++++++++")
+	//fmt.Println(strconv.FormatInt(209, 2))
+	//fmt.Println(strconv.FormatInt(208, 2))
+	//fmt.Println(strconv.ParseInt("11010001", 2, 64))
+	//fmt.Println(strconv.ParseInt("11010000", 2, 64))
+	//fmt.Println(0b11010001 & 0b11010000)
+	////return
+	//fmt.Println("-->")
+	//fmt.Println(string([]byte{208, 159}))
+	//fmt.Println(string([]byte{209, 128}))
+	//fmt.Println(string([]byte{208, 184}))
+	//fmt.Println(string([]byte{208, 178}))
+	//fmt.Println("<--")
+
+	conv := lib.ByteToStringConverter{}
+
+	bt := " Привет! Как дела? 😀 Norn, sam kak&? 123"
+	for _, v := range []byte(bt) {
+		//fmt.Println(v)
+		//fmt.Println(string([]byte{v}))
+		conv.Add(v)
 	}
-	fmt.Println(
-		s.test(),
-	)
+
+	fmt.Println(string(conv.Convert()))
+	fmt.Println(string(conv.ConvertAll()))
 }
 
 type siren struct {

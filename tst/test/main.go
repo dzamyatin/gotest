@@ -1,25 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 func main() {
-	//sl := []int(nil)
-	//nsl := append([]int{}, sl...)
+	test := map[string]int{
+		"Hella":  0,
+		"Orr":    0,
+		"aweawe": 0,
+	}
 
-	//var tst []int
-	tst := make([]int, 0, 10)
+	for i := 0; i < 100; i++ {
+		var j int32 = 0
+		tgt := rand.Int31n(int32(len(test)))
+		for k := range test {
+			if tgt == j {
+				test[k] += 1
+				break
 
-	nsl := append(
-		tst,
-		1,
-	)
+			}
+			j++
+		}
+	}
 
-	nsl = append(nsl, 2)
-	//nsl = append(nsl, 3)
-	nsl = append(nsl, 4)
-	//nsl = append(nsl, 5)
-
-	fmt.Println(nsl)
-	fmt.Println(len(nsl))
-	fmt.Println(cap(nsl))
+	fmt.Println(test)
+	fmt.Println(len(test))
 }

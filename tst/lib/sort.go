@@ -1,5 +1,7 @@
 package lib
 
+import "sort"
+
 type SortOrder int8
 
 const (
@@ -21,4 +23,19 @@ func BTreeSortAsyncAdapter(base []int, order SortOrder) []int {
 		return []int{}
 	}
 	return bTree.AsyncSort(order)
+}
+
+func NativeSortAdapter(base []int, order SortOrder) []int {
+	sort.Slice(base, func(i, j int) bool {
+		switch order {
+		case ASC:
+			return base[i] < base[j]
+		case DESC:
+			return base[i] > base[j]
+		default:
+			return base[i] < base[j]
+		}
+	})
+
+	return base
 }

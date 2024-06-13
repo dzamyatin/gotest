@@ -18,6 +18,7 @@ func main() {
 		{"Async MERGE", lib.QuickSortAsync}, //have better performance then MERGE on arrays large then 100000 elements
 		{"BTree", lib.BTreeSortAdapter},
 		{"Async BTree", lib.BTreeSortAsyncAdapter}, //have better performance in all cases
+		{"Native sort", lib.NativeSortAdapter},
 	}
 
 	for _, v := range sorts {

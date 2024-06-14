@@ -6,7 +6,7 @@ import (
 )
 
 type User struct {
-	Uid          uuid.UUID
+	Uid          uuid.UUID `gorm:"primaryKey"`
 	Login        string
 	PasswordHash []byte
 }

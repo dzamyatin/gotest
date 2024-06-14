@@ -2,7 +2,7 @@ package main
 
 import (
 	api "app/user/api/user/proto"
-	"app/user/internal/handler"
+	"app/user/internal/config"
 	_ "app/user/internal/lib"
 	"flag"
 	"fmt"
@@ -38,5 +38,5 @@ func main() {
 }
 
 func registerServers(grpcServer grpc.ServiceRegistrar) {
-	api.RegisterUserServer(grpcServer, handler.UserServer{})
+	api.RegisterUserServer(grpcServer, config.GetUserServer())
 }

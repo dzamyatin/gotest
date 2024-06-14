@@ -24,6 +24,6 @@ func (c GetUserUseCase) Exec(getUserInput GetUserInput) (entity.User, error) {
 	return user, nil
 }
 
-func InitGetUserUseCase() GetUserUseCase {
-	return GetUserUseCase{userRepository: repository.InitUserRepository()}
+func NewGetUserUseCase(repository repository.UserRepositoryInterface) GetUserUseCase {
+	return GetUserUseCase{userRepository: repository}
 }

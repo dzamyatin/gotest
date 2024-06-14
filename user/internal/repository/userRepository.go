@@ -2,7 +2,7 @@ package repository
 
 import (
 	"app/user/internal/entity"
-	"app/user/internal/lib"
+	"database/sql"
 	"fmt"
 )
 
@@ -13,10 +13,11 @@ type UserRepositoryInterface interface {
 }
 
 type UserRepository struct {
+	db *sql.DB
 }
 
 func (u UserRepository) Create(user entity.User) error {
-	_, err := lib.DB.Exec(`INSERT INTO user
+	_, err := u.db.Exec(`INSERT INTO users
     (uid, login, password_hash)
 VALUES
     (?, ?, ?)`,
@@ -30,8 +31,8 @@ VALUES
 
 func (u UserRepository) GetById(uid string) (entity.User, error) {
 	user := entity.User{}
-	err := lib.DB.QueryRow(`SELECT uid, login, password_hash
-FROM user
+	err := u.db.QueryRow(`SELECT uid, login, password_hash
+FROM users
 WHERE uid = ?
 LIMIT 1
 `, uid).Scan(
@@ -46,8 +47,8 @@ LIMIT 1
 }
 
 func (u UserRepository) GetAll() ([]entity.User, error) {
-	rows, err := lib.DB.Query(`SELECT uid, login, password_hash
-FROM user
+	rows, err := u.db.Query(`SELECT uid, login, password_hash
+FROM users
 `,
 	)
 
@@ -65,6 +66,8 @@ FROM user
 	return users, nil
 }
 
-func InitUserRepository() UserRepositoryInterface {
-	return UserRepository{}
+func NewUserRepository(db *sql.DB) UserRepository {
+	return UserRepository{
+		db: db,
+	}
 }

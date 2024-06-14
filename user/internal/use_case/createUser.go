@@ -43,11 +43,6 @@ func (c CreateUserUseCase) Execute(i interface{}) {
 	c.Exec(input)
 }
 
-func InitCreateUserUseCase() CreateUserUseCase {
-	return CreateUserUseCase{userRepository: repository.InitUserRepository()}
-}
-
-func init() {
-	createUser := InitCreateUserUseCase()
-	lib.EventBusInstance.Subscribe(createUser)
+func NewCreateUserUseCase(userRepository repository.UserRepositoryInterface) CreateUserUseCase {
+	return CreateUserUseCase{userRepository: userRepository}
 }

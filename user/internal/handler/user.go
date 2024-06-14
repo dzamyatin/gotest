@@ -10,10 +10,25 @@ import (
 
 type UserServer struct {
 	api.UnimplementedUserServer
+	getAllUsersUseCase *use_case2.GetAllUsersUseCase
+	getUserUseCase     *use_case2.GetUserUseCase
+	createUserUseCase  *use_case2.CreateUserUseCase
+}
+
+func NewUserServer(
+	getAllUsersUseCase *use_case2.GetAllUsersUseCase,
+	getUserUseCase *use_case2.GetUserUseCase,
+	createUserUseCase *use_case2.CreateUserUseCase,
+) UserServer {
+	return UserServer{
+		getAllUsersUseCase: getAllUsersUseCase,
+		getUserUseCase:     getUserUseCase,
+		createUserUseCase:  createUserUseCase,
+	}
 }
 
 func (s UserServer) Get(context context.Context, request *api.UserGetRequest) (*api.UserGetResponse, error) {
-	user, err := use_case2.InitGetUserUseCase().Exec(use_case2.GetUserInput{
+	user, err := s.getUserUseCase.Exec(use_case2.GetUserInput{
 		Uid: request.Uid,
 	})
 
@@ -29,7 +44,7 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 	//	Login: request.Login,
 	//})
 
-	user, err := use_case2.InitCreateUserUseCase().Exec(
+	user, err := s.createUserUseCase.Exec(
 		use_case2.CreateUserInput{
 			Login: request.Login,
 		},
@@ -47,11 +62,11 @@ func (s UserServer) Create(context context.Context, request *api.UserCreateReque
 
 func (s UserServer) GetAll(context context.Context, request *api.UserGetAllRequest) (*api.UserGetAllResponse, error) {
 	response := api.UserGetAllResponse{}
-	users, err := use_case2.InitGetAllUsersUseCase().Exec()
+	users, err := s.getAllUsersUseCase.Exec()
 
 	if err != nil {
 		return nil,
-			status.Errorf(codes.Internal, "Internal error")
+			status.Errorf(codes.Internal, "Internal error: %w", err)
 	}
 
 	for _, v := range users {

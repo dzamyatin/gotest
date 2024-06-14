@@ -20,6 +20,6 @@ func (c GetAllUsersUseCase) Exec() ([]entity.User, error) {
 	return users, nil
 }
 
-func InitGetAllUsersUseCase() GetAllUsersUseCase {
-	return GetAllUsersUseCase{userRepository: repository.InitUserRepository()}
+func NewGetAllUsersUseCase(userRepository repository.UserRepositoryInterface) GetAllUsersUseCase {
+	return GetAllUsersUseCase{userRepository: userRepository}
 }

@@ -6,6 +6,9 @@ start_user:
 start_console:
 	go run ./user/console/main.go $(ARG)
 
+schema_update:
+	go run ./user/console/main.go gorm_schema_migration
+
 migrate_create:
 	go run ./user/console/main.go migrate_create
 

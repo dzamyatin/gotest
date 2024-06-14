@@ -1,21 +1,36 @@
 package main
 
 import (
-	"app/tst/lib"
+	"errors"
 	"fmt"
 )
 
+type CustomErr string
+
+func (e CustomErr) Error() string {
+	return string(e)
+}
+
+var (
+	CustomErrFail = CustomErr("Fail")
+)
+
 func main() {
-	var list lib.OneWayList
-	for i := 0; i < 10; i++ {
-		list.AddVal(i)
-	}
+	var ch CustomErr
+	crr := NewCustomErr()
+	fmt.Println(
+		string(CustomErrFail),
+		errors.Is(
+			fmt.Errorf("CustomErrFail %w", CustomErrFail),
+			CustomErrFail,
+		),
+		errors.As(
+			crr,
+			&ch,
+		),
+	)
+}
 
-	list.Flip()
-	list.Flip()
-	list.Flip()
-
-	for _, v := range list.ToSlice() {
-		fmt.Println(v.Value())
-	}
+func NewCustomErr() error {
+	return CustomErr("Error")
 }

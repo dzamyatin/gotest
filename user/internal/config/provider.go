@@ -18,14 +18,16 @@ func syncGetOrCreateByType[T interface{}](create func() T) T {
 func syncGetOrCreate[T interface{}](name string, create func() T) T {
 	s.RLock()
 	if res, ok := services[name]; ok {
+		s.RUnlock()
 		return res.(T)
 	}
 	s.RUnlock()
 
 	res := create()
+
 	s.Lock()
 	services[name] = res
 	s.Unlock()
 
-	return services[name].(T)
+	return res
 }

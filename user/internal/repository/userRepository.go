@@ -17,7 +17,7 @@ type UserRepository struct {
 
 func (u UserRepository) Create(user entity.User) error {
 	_, err := lib.DB.Exec(`INSERT INTO user
-    (uid, login, passwordHash)
+    (uid, login, password_hash)
 VALUES
     (?, ?, ?)`,
 		user.Uid,
@@ -30,7 +30,7 @@ VALUES
 
 func (u UserRepository) GetById(uid string) (entity.User, error) {
 	user := entity.User{}
-	err := lib.DB.QueryRow(`SELECT uid, login, passwordHash
+	err := lib.DB.QueryRow(`SELECT uid, login, password_hash
 FROM user
 WHERE uid = ?
 LIMIT 1
@@ -46,7 +46,7 @@ LIMIT 1
 }
 
 func (u UserRepository) GetAll() ([]entity.User, error) {
-	rows, err := lib.DB.Query(`SELECT uid, login, passwordHash
+	rows, err := lib.DB.Query(`SELECT uid, login, password_hash
 FROM user
 `,
 	)

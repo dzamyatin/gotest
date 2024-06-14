@@ -10,6 +10,7 @@ import (
 )
 
 type MigrateCommand struct {
+	ms *lib.MigrationService
 }
 
 type Log struct {
@@ -28,11 +29,10 @@ func (m MigrateCommand) GetCode() string {
 }
 
 func (m MigrateCommand) Execute(input Input) Output {
-
 	migrator, err := migrate.NewWithDatabaseInstance(
-		"file://"+lib.MigrationServiceInstance.Folder,
+		"file://"+m.ms.Folder,
 		"database",
-		lib.MigrationServiceInstance.Driver,
+		m.ms.Driver,
 	)
 
 	if err != nil {
@@ -51,4 +51,8 @@ func (m MigrateCommand) Execute(input Input) Output {
 	return Output{code: OutputCodeSuccess}
 }
 
-var MigrateCommandInstance = &MigrateCommand{}
+func NewMigrateCommand(ms *lib.MigrationService) MigrateCommand {
+	return MigrateCommand{
+		ms: ms,
+	}
+}

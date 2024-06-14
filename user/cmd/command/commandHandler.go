@@ -39,6 +39,8 @@ func (h CommandHandler) Handle(commandCode string) {
 
 	output := command.Execute(input)
 
+	fmt.Println(output.message)
+
 	os.Exit(output.code)
 }
 

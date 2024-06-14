@@ -31,7 +31,8 @@ const OutputCodeSuccess = 0
 const OutputCodeFail = 1
 
 type Output struct {
-	code int
+	code    int
+	message string
 }
 
 type CommandInterface interface {

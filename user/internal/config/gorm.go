@@ -9,7 +9,8 @@ import (
 func GetGorm() *gorm.DB {
 	return syncGetOrCreateByType(
 		func() *gorm.DB {
-			db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+			conf := GetDatabaseConfig()
+			db, err := gorm.Open(sqlite.Open(conf.Path), &gorm.Config{})
 			if err != nil {
 				panic("failed to connect database")
 			}

@@ -34,11 +34,13 @@ func getCommandList() []interface{} {
 }
 
 func GetMigrateCreateCommand() *command.MigrateCreateCommand {
-	return &command.MigrateCreateCommand{}
+	cmd := command.NewMigrateCreateCommand(GetMigrationService())
+	return &cmd
 }
 
 func GetMigrateCommand() *command.MigrateCommand {
-	return &command.MigrateCommand{}
+	cmd := command.NewMigrateCommand(GetMigrationService())
+	return &cmd
 }
 
 func GetGormSchemaMigrationCommand() *command.GormSchemaMigrationCommand {

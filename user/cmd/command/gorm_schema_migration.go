@@ -14,7 +14,19 @@ func (g GormSchemaMigrationCommand) GetCode() string {
 }
 
 func (g GormSchemaMigrationCommand) Execute(input Input) Output {
-	return Output{code: OutputCodeSuccess}
+	err := g.db.AutoMigrate(g.entities...)
+
+	if err != nil {
+		return Output{
+			code:    OutputCodeFail,
+			message: err.Error(),
+		}
+	}
+
+	return Output{
+		code:    OutputCodeSuccess,
+		message: "Done",
+	}
 }
 
 func NewGormSchemaMigrationCommand(

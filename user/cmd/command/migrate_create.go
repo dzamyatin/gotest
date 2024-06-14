@@ -12,6 +12,7 @@ import (
 )
 
 type MigrateCreateCommand struct {
+	ms *lib.MigrationService
 }
 
 func (m MigrateCreateCommand) GetCode() string {
@@ -26,7 +27,7 @@ func (m MigrateCreateCommand) Execute(input Input) Output {
 	}
 
 	base := fmt.Sprintf("%v_%v.", time.Now().Unix(), name)
-	_, err := os.Create(lib.MigrationServiceInstance.Folder + "/" + base + "up.sql")
+	_, err := os.Create(m.ms.Folder + "/" + base + "up.sql")
 
 	if err != nil {
 		log.Fatal(err.Error())
@@ -35,7 +36,11 @@ func (m MigrateCreateCommand) Execute(input Input) Output {
 	return Output{code: OutputCodeSuccess}
 }
 
-var MigrateCreateCommandInstance = &MigrateCreateCommand{}
+func NewMigrateCreateCommand(ms *lib.MigrationService) MigrateCreateCommand {
+	return MigrateCreateCommand{
+		ms: ms,
+	}
+}
 
 func (m MigrateCreateCommand) generateRandName() string {
 	name := ""

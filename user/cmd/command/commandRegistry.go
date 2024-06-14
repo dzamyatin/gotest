@@ -70,11 +70,3 @@ func (r *Registry) GetCommand(code string) (CommandInterface, error) {
 
 	return nil, exception.InitError("There is no command \"%v\"", code)
 }
-
-var CommandRegistryInstance = &Registry{}
-
-func init() {
-	for _, v := range CommandList {
-		CommandRegistryInstance.Register(v)
-	}
-}

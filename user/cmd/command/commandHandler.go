@@ -46,14 +46,14 @@ func (h CommandHandler) Help() string {
 	text := ""
 
 	for k, c := range h.registry.GetCodes() {
-		text += fmt.Sprintf("%v) %v", k+1, c)
+		text += fmt.Sprintf("%v) %v \n", k+1, c)
 	}
 
 	return "Available command codes: \n\n" + text
 }
 
-var CommandHandlerInstance = &CommandHandler{}
-
-func init() {
-	CommandHandlerInstance.registry = CommandRegistryInstance
+func NewCommandHandler(registry *Registry) CommandHandler {
+	return CommandHandler{
+		registry: registry,
+	}
 }

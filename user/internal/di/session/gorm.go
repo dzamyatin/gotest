@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *Session) NewGormSession() *gorm.DB {
+func (s *Session) GormSession() *gorm.DB {
 	return getOrCreateTyped(s, func() *gorm.DB {
 		return static.GetGorm().WithContext(s.ctx)
 	})

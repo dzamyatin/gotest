@@ -1,11 +1,14 @@
 package use_case
 
-import "gorm.io/gorm"
+import (
+	"app/user/internal/entity"
+	"gorm.io/gorm"
+)
 
 type UpdateUserInput struct {
-	Uid      int
-	Login    string
-	Password string
+	Uid      *string
+	Login    *string
+	Password *string
 }
 
 type UpdateUserUseCase struct {
@@ -16,7 +19,27 @@ func NewUpdateUserUseCase(gorm *gorm.DB) UpdateUserUseCase {
 	return UpdateUserUseCase{gorm: gorm}
 }
 
-func (u UpdateUserUseCase) Exec(createUserInput CreateUserInput) error {
+func (u UpdateUserUseCase) Exec(updateUserInput UpdateUserInput) error {
+	user := &entity.User{}
+	u.gorm.Take(user, updateUserInput.Uid)
 
-	return nil
+	if len(user.Uid) == 0 {
+		return nil
+	}
+
+	err := u.gorm.Transaction(
+		func(tx *gorm.DB) error {
+			if updateUserInput.Login != nil {
+				user.Login = *updateUserInput.Login
+			}
+
+			if updateUserInput.Password != nil {
+				user.SetPassword(*updateUserInput.Password)
+			}
+
+			return nil
+		},
+	)
+
+	return err
 }

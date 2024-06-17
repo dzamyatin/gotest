@@ -82,7 +82,7 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 
 func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
 	ses := interceptor.GetSession(ctx)
-	ses.NewGormSession()
+	ses.GormSession()
 
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }

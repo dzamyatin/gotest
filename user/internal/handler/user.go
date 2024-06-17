@@ -78,3 +78,7 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 
 	return &response, nil
 }
+
+func (s UserServer) Update(context.Context, *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}

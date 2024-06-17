@@ -2,6 +2,7 @@ package handler
 
 import (
 	api "app/user/api/user/proto"
+	"app/user/internal/di/interceptor"
 	use_case2 "app/user/internal/use_case"
 	"context"
 	"google.golang.org/grpc/codes"
@@ -79,6 +80,9 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 	return &response, nil
 }
 
-func (s UserServer) Update(context.Context, *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
+func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
+	ses := interceptor.GetSession(ctx)
+	ses.NewGormSession()
+
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }

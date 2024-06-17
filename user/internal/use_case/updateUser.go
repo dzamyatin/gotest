@@ -1,15 +1,19 @@
 package use_case
 
+import "gorm.io/gorm"
+
 type UpdateUserInput struct {
-	Login string
+	Uid      int
+	Login    string
+	Password string
 }
 
 type UpdateUserUseCase struct {
-	//gorm *gorm.DB
+	gorm *gorm.DB
 }
 
-func NewUpdateUserUseCase() UpdateUserUseCase {
-	return UpdateUserUseCase{}
+func NewUpdateUserUseCase(gorm *gorm.DB) UpdateUserUseCase {
+	return UpdateUserUseCase{gorm: gorm}
 }
 
 func (u UpdateUserUseCase) Exec(createUserInput CreateUserInput) error {

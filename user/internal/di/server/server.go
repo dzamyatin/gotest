@@ -1,4 +1,4 @@
-package common
+package server
 
 import (
 	"app/user/internal/di/static"

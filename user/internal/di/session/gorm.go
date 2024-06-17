@@ -7,8 +7,6 @@ import (
 
 func (s *Session) NewGormSession() *gorm.DB {
 	return getOrCreateTyped(s, func() *gorm.DB {
-		return static.GetGorm().Session(&gorm.Session{
-			Context: s.ctx,
-		})
+		return static.GetGorm().WithContext(s.ctx)
 	})
 }

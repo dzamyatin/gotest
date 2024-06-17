@@ -1,4 +1,4 @@
-package common
+package interceptor
 
 import (
 	"app/user/internal/di/session"

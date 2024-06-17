@@ -14,18 +14,20 @@ const (
 func SessionServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 	ses := session.NewSession(ctx)
 
-	context.WithValue(ctx, sessionKey, ses)
-	resp, err = handler(ctx, req)
+	resp, err = handler(
+		context.WithValue(ctx, sessionKey, ses),
+		req,
+	)
 
 	return
 }
 
 func GetSession(ctx context.Context) *session.Session {
-	ses, ok := ctx.Value(sessionKey).(session.Session)
+	ses, ok := ctx.Value(sessionKey).(*session.Session)
 
 	if !ok {
 		log.Fatalf("There is not session value to exclude")
 	}
 
-	return &ses
+	return ses
 }

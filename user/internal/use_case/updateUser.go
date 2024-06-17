@@ -23,7 +23,7 @@ func (u UpdateUserUseCase) Exec(updateUserInput UpdateUserInput) error {
 	user := &entity.User{}
 	u.gorm.Take(user, updateUserInput.Uid)
 
-	if len(user.Uid) == 0 {
+	if user.Uid.ID() == 0 {
 		return nil
 	}
 
@@ -36,6 +36,8 @@ func (u UpdateUserUseCase) Exec(updateUserInput UpdateUserInput) error {
 			if updateUserInput.Password != nil {
 				user.SetPassword(*updateUserInput.Password)
 			}
+
+			u.gorm.Save(user)
 
 			return nil
 		},

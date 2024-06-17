@@ -22,9 +22,11 @@ func GetDatabaseConfig() config.Config {
 			sourcePath = "./mydatabase.db"
 		}
 
-		return config.Config{
-			Path: sourcePath,
-		}
+		return config.NewConfig(
+			sourcePath,
+			"database",
+			"user/cmd/migrations",
+		)
 	})
 }
 
@@ -56,7 +58,7 @@ func GetMigrationService() *lib.MigrationService {
 				log.Fatal(err)
 			}
 
-			ms.Folder = "migrations"
+			ms.Folder = GetDatabaseConfig().MigrationDir
 
 			return &ms
 		},

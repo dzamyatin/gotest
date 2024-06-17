@@ -2,6 +2,7 @@ package handler
 
 import (
 	api "app/user/api/user/proto"
+	"app/user/internal/converter"
 	"app/user/internal/di/interceptor"
 	use_case2 "app/user/internal/use_case"
 	"context"
@@ -82,7 +83,11 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 
 func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
 	ses := interceptor.GetSession(ctx)
-	ses.GormSession()
+	err := ses.GetUpdateUserUseCase().Exec(converter.UserUpdateRequestToUpdateUserInput(req))
 
-	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Internal error: %w", err)
+	}
+
+	return &api.UserUpdateResponse{}, nil
 }

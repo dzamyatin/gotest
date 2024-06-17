@@ -14,7 +14,8 @@ type Session struct {
 
 func NewSession(ctx context.Context) *Session {
 	return &Session{
-		ctx: ctx,
+		ctx:      ctx,
+		services: make(map[string]interface{}),
 	}
 }
 

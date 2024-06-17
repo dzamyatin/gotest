@@ -2,7 +2,7 @@ package main
 
 import (
 	api "app/user/api/user/proto"
-	"app/user/internal/config"
+	"app/user/internal/di/common"
 	_ "app/user/internal/lib"
 	"flag"
 	"fmt"
@@ -27,7 +27,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(config.SessionServerInterceptor),
+		grpc.UnaryInterceptor(common.SessionServerInterceptor),
 	)
 	registerServers(grpcServer)
 
@@ -40,5 +40,5 @@ func main() {
 }
 
 func registerServers(grpcServer grpc.ServiceRegistrar) {
-	api.RegisterUserServer(grpcServer, config.GetUserServer())
+	api.RegisterUserServer(grpcServer, common.GetUserServer())
 }

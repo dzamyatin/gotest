@@ -1,13 +1,13 @@
 package main
 
 import (
-	"app/user/internal/config"
+	"app/user/internal/di/static"
 	"log"
 	"os"
 )
 
 func main() {
-	commandHandler := config.GetCommandHandler()
+	commandHandler := static.GetCommandHandler()
 
 	if len(os.Args) < 2 {
 		log.Fatalln("There is no command name to run \n\n", commandHandler.Help())

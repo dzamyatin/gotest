@@ -1,6 +1,7 @@
-package config
+package static
 
 import (
+	"app/user/internal/config"
 	"app/user/internal/lib"
 	"database/sql"
 	"github.com/golang-migrate/migrate/database/sqlite3"
@@ -10,12 +11,8 @@ import (
 	"runtime"
 )
 
-type Config struct {
-	Path string
-}
-
-func GetDatabaseConfig() Config {
-	return globalGetOrCreateTyped(func() Config {
+func GetDatabaseConfig() config.Config {
+	return globalGetOrCreateTyped(func() config.Config {
 		_, file, _, ok := runtime.Caller(0)
 
 		sourcePath := ""
@@ -25,7 +22,7 @@ func GetDatabaseConfig() Config {
 			sourcePath = "./mydatabase.db"
 		}
 
-		return Config{
+		return config.Config{
 			Path: sourcePath,
 		}
 	})

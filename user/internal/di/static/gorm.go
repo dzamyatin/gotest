@@ -1,4 +1,4 @@
-package config
+package static
 
 import (
 	"app/user/internal/entity"
@@ -35,12 +35,4 @@ func GetGormEntities() []interface{} {
 	return []interface{}{
 		entity.User{},
 	}
-}
-
-func (s *Session) NewGormSession() *gorm.DB {
-	return getOrCreateTyped(s, func() *gorm.DB {
-		return GetGorm().Session(&gorm.Session{
-			Context: s.ctx,
-		})
-	})
 }

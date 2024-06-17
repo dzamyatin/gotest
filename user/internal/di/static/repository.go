@@ -1,4 +1,4 @@
-package config
+package static
 
 import (
 	"app/user/internal/repository"

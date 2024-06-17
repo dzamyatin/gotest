@@ -4,12 +4,22 @@ import (
 	"app/user/internal/entity"
 	"database/sql"
 	"fmt"
+	"gorm.io/gorm"
 )
 
 type UserRepositoryInterface interface {
 	Create(user entity.User) error
 	GetById(uid string) (entity.User, error)
 	GetAll() ([]entity.User, error)
+	Update(gorm *gorm.DB, user entity.User) error
+}
+
+func NewUserRepository(
+	db *sql.DB,
+) UserRepository {
+	return UserRepository{
+		db: db,
+	}
 }
 
 type UserRepository struct {
@@ -27,6 +37,12 @@ VALUES
 	)
 
 	return err
+}
+
+func (u UserRepository) Update(gorm *gorm.DB, user entity.User) error {
+	gorm.Save(user)
+
+	return nil
 }
 
 func (u UserRepository) GetById(uid string) (entity.User, error) {
@@ -64,10 +80,4 @@ FROM users
 	}
 
 	return users, nil
-}
-
-func NewUserRepository(db *sql.DB) UserRepository {
-	return UserRepository{
-		db: db,
-	}
 }

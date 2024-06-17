@@ -26,7 +26,7 @@ func main() {
 		return
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(CustomServerOption{})
 	registerServers(grpcServer)
 
 	err = grpcServer.Serve(listener)
@@ -39,4 +39,12 @@ func main() {
 
 func registerServers(grpcServer grpc.ServiceRegistrar) {
 	api.RegisterUserServer(grpcServer, config.GetUserServer())
+}
+
+type CustomServerOption struct {
+	grpc.EmptyServerOption
+}
+
+func (c CustomServerOption) apply(s *interface{}) {
+
 }

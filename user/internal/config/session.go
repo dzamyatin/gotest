@@ -25,7 +25,7 @@ func getOrCreateTyped[T interface{}](s *Session, create func() T) T {
 
 func getOrCreate[T interface{}](s *Session, name string, create func() T) T {
 	s.mx.RLock()
-	if res, ok := services[name]; ok {
+	if res, ok := s.services[name]; ok {
 		s.mx.RUnlock()
 		return res.(T)
 	}
@@ -34,7 +34,7 @@ func getOrCreate[T interface{}](s *Session, name string, create func() T) T {
 	res := create()
 
 	s.mx.Lock()
-	services[name] = res
+	s.services[name] = res
 	s.mx.Unlock()
 
 	return res

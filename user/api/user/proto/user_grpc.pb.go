@@ -22,6 +22,7 @@ const (
 	User_Create_FullMethodName = "/api.User/create"
 	User_Get_FullMethodName    = "/api.User/get"
 	User_GetAll_FullMethodName = "/api.User/getAll"
+	User_Update_FullMethodName = "/api.User/update"
 )
 
 // UserClient is the client API for User service.
@@ -31,6 +32,7 @@ type UserClient interface {
 	Create(ctx context.Context, in *UserCreateRequest, opts ...grpc.CallOption) (*UserCreateResponse, error)
 	Get(ctx context.Context, in *UserGetRequest, opts ...grpc.CallOption) (*UserGetResponse, error)
 	GetAll(ctx context.Context, in *UserGetAllRequest, opts ...grpc.CallOption) (*UserGetAllResponse, error)
+	Update(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*UserUpdateResponse, error)
 }
 
 type userClient struct {
@@ -68,6 +70,15 @@ func (c *userClient) GetAll(ctx context.Context, in *UserGetAllRequest, opts ...
 	return out, nil
 }
 
+func (c *userClient) Update(ctx context.Context, in *UserUpdateRequest, opts ...grpc.CallOption) (*UserUpdateResponse, error) {
+	out := new(UserUpdateResponse)
+	err := c.cc.Invoke(ctx, User_Update_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type UserServer interface {
 	Create(context.Context, *UserCreateRequest) (*UserCreateResponse, error)
 	Get(context.Context, *UserGetRequest) (*UserGetResponse, error)
 	GetAll(context.Context, *UserGetAllRequest) (*UserGetAllResponse, error)
+	Update(context.Context, *UserUpdateRequest) (*UserUpdateResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedUserServer) Get(context.Context, *UserGetRequest) (*UserGetRe
 }
 func (UnimplementedUserServer) GetAll(context.Context, *UserGetAllRequest) (*UserGetAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
+}
+func (UnimplementedUserServer) Update(context.Context, *UserUpdateRequest) (*UserUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -158,6 +173,24 @@ func _User_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).Update(ctx, req.(*UserUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "getAll",
 			Handler:    _User_GetAll_Handler,
+		},
+		{
+			MethodName: "update",
+			Handler:    _User_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

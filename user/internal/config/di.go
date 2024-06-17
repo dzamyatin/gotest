@@ -1,7 +1,6 @@
-package di
+package config
 
 import (
-	"app/user/internal/config"
 	"context"
 	"google.golang.org/grpc"
 	"log"
@@ -12,7 +11,7 @@ const (
 )
 
 func SessionServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-	session := config.NewSession(ctx)
+	session := NewSession(ctx)
 
 	context.WithValue(ctx, sessionKey, session)
 	resp, err = handler(ctx, req)
@@ -20,8 +19,8 @@ func SessionServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServ
 	return
 }
 
-func GetSession(ctx context.Context) *config.Session {
-	session, ok := ctx.Value(sessionKey).(config.Session)
+func GetSession(ctx context.Context) *Session {
+	session, ok := ctx.Value(sessionKey).(Session)
 
 	if !ok {
 		log.Fatalf("There is not session value to exclude")

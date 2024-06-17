@@ -7,6 +7,12 @@ message UserCreateRequest {
   string password = 2;
 }
 
+message UserUpdateRequest {
+  string uid = 1;
+  string login = 2;
+  string password = 3;
+}
+
 message UserCreateResponse {
   string uid = 1;
 }
@@ -22,6 +28,8 @@ message UserGetResponse {
 
 message UserGetAllRequest {}
 
+message UserUpdateResponse {}
+
 message UserGetAllResponse {
   repeated UserGetResponse users = 1;
 }
@@ -30,4 +38,5 @@ service User {
   rpc create(UserCreateRequest) returns (UserCreateResponse);
   rpc get(UserGetRequest) returns (UserGetResponse);
   rpc getAll(UserGetAllRequest) returns (UserGetAllResponse);
+  rpc update(UserUpdateRequest) returns (UserUpdateResponse);
 }

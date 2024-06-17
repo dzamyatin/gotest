@@ -10,12 +10,12 @@ var (
 	services = make(map[string]interface{})
 )
 
-func syncGetOrCreateByType[T interface{}](create func() T) T {
+func globalGetOrCreateTyped[T interface{}](create func() T) T {
 	var t T
-	return syncGetOrCreate(reflect.TypeOf(t).String(), create)
+	return globalGetOrCreate(reflect.TypeOf(t).String(), create)
 }
 
-func syncGetOrCreate[T interface{}](name string, create func() T) T {
+func globalGetOrCreate[T interface{}](name string, create func() T) T {
 	s.RLock()
 	if res, ok := services[name]; ok {
 		s.RUnlock()

@@ -15,7 +15,7 @@ type Config struct {
 }
 
 func GetDatabaseConfig() Config {
-	return syncGetOrCreateByType(func() Config {
+	return globalGetOrCreateTyped(func() Config {
 		_, file, _, ok := runtime.Caller(0)
 
 		sourcePath := ""
@@ -32,7 +32,7 @@ func GetDatabaseConfig() Config {
 }
 
 func GetDB() *sql.DB {
-	return syncGetOrCreateByType(
+	return globalGetOrCreateTyped(
 		func() *sql.DB {
 			conf := GetDatabaseConfig()
 			DB, err := sql.Open("sqlite3", conf.Path)
@@ -46,7 +46,7 @@ func GetDB() *sql.DB {
 }
 
 func GetMigrationService() *lib.MigrationService {
-	return syncGetOrCreateByType(
+	return globalGetOrCreateTyped(
 		func() *lib.MigrationService {
 			ms := lib.MigrationService{}
 

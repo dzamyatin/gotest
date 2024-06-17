@@ -12,7 +12,7 @@ func GetCommandHandler() *command.CommandHandler {
 }
 
 func getCommandRegistry() *command.Registry {
-	return syncGetOrCreateByType(
+	return globalGetOrCreateTyped(
 		func() *command.Registry {
 			registry := &command.Registry{}
 			for _, v := range getCommands() {
@@ -44,7 +44,7 @@ func GetMigrateCommand() *command.MigrateCommand {
 }
 
 func GetGormSchemaMigrationCommand() *command.GormSchemaMigrationCommand {
-	return syncGetOrCreateByType(
+	return globalGetOrCreateTyped(
 		func() *command.GormSchemaMigrationCommand {
 			cmd := command.NewGormSchemaMigrationCommand(GetGorm(), GetGormEntities())
 			return &cmd

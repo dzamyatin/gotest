@@ -8,7 +8,7 @@ import (
 )
 
 func GetGorm() *gorm.DB {
-	return syncGetOrCreateByType(
+	return globalGetOrCreateTyped(
 		func() *gorm.DB {
 			conf := GetDatabaseConfig()
 			db, err := gorm.Open(sqlite.Open(conf.Path), &gorm.Config{
@@ -35,4 +35,12 @@ func GetGormEntities() []interface{} {
 	return []interface{}{
 		entity.User{},
 	}
+}
+
+func (s *Session) NewGormSession() *gorm.DB {
+	return getOrCreateTyped(s, func() *gorm.DB {
+		return GetGorm().Session(&gorm.Session{
+			Context: s.ctx,
+		})
+	})
 }

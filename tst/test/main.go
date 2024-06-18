@@ -111,9 +111,9 @@ func (k *KVCache) getKeyMx(key string) *sync.RWMutex {
 }
 
 func (k *KVCache) invalidate(key string, unit cacheUnit) {
+	mx := k.getKeyMx(key)
+	mx.Lock()
 	go func(key string, u cacheUnit) {
-		mx := k.getKeyMx(key)
-		mx.Lock()
 		if time.Now().Unix()-u.tta <= TTL_CACHE_SEC {
 			v, err := k.db.Get(key)
 			k.addToCache(key, v, err)

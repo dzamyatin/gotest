@@ -25,10 +25,24 @@ test:
 	go test -v ./user/...
 tst:
 	go test -v ./tst/...
+
+#benchmark test https://habr.com/ru/articles/268585/
 test_b:
-	go test -bench=MyFunction -benchtime=10s -benchmem
+	go test -bench=BTreeSort -benchtime=1s -benchmem -v ./tst/search/
+#go test -bench=. -benchmem bench_test.go > new.txt
+#git stash
+#go test -bench=. -benchmem bench_test.go > old.txt
+#go get golang.org/x/tools/cmd/benchcmp
+#benchcmp old.txt new.txt
+# Cpu profile:
+# go test -bench=. -benchmem -cpuprofile=cpu.out -memprofile=mem.out bench_test.go
+
+
 #main test
 #unit test
-#benchmark test
 #integration ?
 #exaple test
+
+#go test ./... -cover
+#go test ./... -coverprofile=coverage.txt
+#go tool cover -html coverage.txt -o index.html

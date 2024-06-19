@@ -24,10 +24,13 @@ func TestQuickSort(t *testing.T) {
 				t.Fatalf(`Error sort direction: %v
 Base: %v
 Res: %v
+Expected: %v
 `,
 					s,
 					base,
-					resA)
+					resA,
+					resB,
+				)
 			}
 		}
 	}

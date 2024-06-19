@@ -68,7 +68,7 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 
 	if err != nil {
 		return nil,
-			status.Errorf(codes.Internal, "Internal error: %w", err)
+			status.Errorf(codes.Internal, "Internal error: %v", err.Error())
 	}
 
 	for _, v := range users {
@@ -86,7 +86,7 @@ func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*ap
 	err := ses.GetUpdateUserUseCase().Exec(converter.UserUpdateRequestToUpdateUserInput(req))
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Internal error: %w", err)
+		return nil, status.Errorf(codes.Internal, "Internal error: %v", err.Error())
 	}
 
 	return &api.UserUpdateResponse{}, nil

@@ -1,22 +1,44 @@
 package main
 
 import (
-	"fmt"
-	"sync/atomic"
-	"unsafe"
+	"log"
 )
 
+type Person struct {
+	Name string
+	Age  int
+	//Ptr  []int
+	//Ptr map[int]int
+}
+
+func (p *Person) setAge(age int) {
+	p.Age = age
+}
+
+type Employee struct {
+	Name string
+	Age  int
+	ID   int
+}
+
 func main() {
-	a := 1
-	b := 2
+	p := Person{Name: "Alice", Age: 30}
+	//p2 := Person{Name: "Alice", Age: 30}
+	//e := Employee{Name: "Alice", Age: 30, ID: 123}
 
-	pa := unsafe.Pointer(&a)
-	pb := unsafe.Pointer(&b)
+	//log.Println(p == p2)
 
-	atomic.SwapPointer(&pa, pb)
+	change2(p)
 
-	v := *(*int)(pa)
+	log.Println(p.Age)
+}
 
-	fmt.Printf("%v", v)
+func change(p Person) {
+	p.Age = 31
+}
 
+func change2(p interface{}) {
+	t := p.(Person)
+	t.Age = 31
+	t.setAge(31)
 }

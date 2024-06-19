@@ -17,7 +17,7 @@ type Log struct {
 }
 
 func (l Log) Printf(format string, v ...interface{}) {
-	fmt.Printf(format, v)
+	fmt.Printf(format, v...)
 }
 
 func (l Log) Verbose() bool {

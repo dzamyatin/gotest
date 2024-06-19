@@ -14,7 +14,7 @@ func (c GetAllUsersUseCase) Exec() ([]entity.User, error) {
 	users, err := c.userRepository.GetAll()
 
 	if err != nil {
-		return users, fmt.Errorf("Can't get users", err)
+		return users, fmt.Errorf("can't get users %w", err)
 	}
 
 	return users, nil

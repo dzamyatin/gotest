@@ -28,7 +28,7 @@ tst:
 
 #benchmark test https://habr.com/ru/articles/268585/
 test_b:
-	go test -bench=BTreeSort -benchtime=1s -benchmem -v ./tst/search/
+	go test -bench=. -benchtime=1s -benchmem -cpuprofile=cpu.out -memprofile=mem.out -v ./tst/search
 #go test -bench=. -benchmem bench_test.go > new.txt
 #git stash
 #go test -bench=. -benchmem bench_test.go > old.txt

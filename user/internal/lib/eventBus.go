@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"fmt"
 	eventbus "github.com/dtomasi/go-event-bus/v3"
 )
 
@@ -40,7 +39,7 @@ func (b EventBus) Dispatch(input EventInterface) {
 var EventBusInstance *EventBus
 
 func init() {
-	fmt.Println("Event bus init")
+	//fmt.Println("Event bus init")
 	EventBusInstance = &EventBus{
 		bus: eventbus.NewEventBus(),
 	}

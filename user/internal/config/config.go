@@ -3,7 +3,6 @@ package config
 import (
 	"app/user/internal/config/flagconfig"
 	"app/user/internal/di/singleton"
-	"fmt"
 	"path/filepath"
 	"runtime"
 )
@@ -17,12 +16,6 @@ var (
 )
 
 func GetConfig() *Config {
-	if isProfileActive {
-		fmt.Printf("Profiler is active\n")
-	} else {
-		fmt.Printf("Profiler is NOT active\n")
-	}
-
 	return singleton.GlobalGetOrCreateTyped(func() *Config {
 		return &Config{
 			path,
@@ -35,21 +28,23 @@ func GetConfig() *Config {
 }
 
 type Config struct {
-	Path          string
-	DatabaseName  string
-	MigrationDir  string
-	profileActive bool
+	Path            string
+	DatabaseName    string
+	MigrationDir    string
+	IsProfileActive bool
 }
 
 func NewConfig(
 	path string,
 	databaseName string,
 	migrationDir string,
+	isProfileActive bool,
 ) Config {
 	return Config{
-		Path:         path,
-		DatabaseName: databaseName,
-		MigrationDir: migrationDir,
+		Path:            path,
+		DatabaseName:    databaseName,
+		MigrationDir:    migrationDir,
+		IsProfileActive: isProfileActive,
 	}
 }
 

@@ -1,22 +1,32 @@
 package static
 
 import (
+	"app/user/internal/config/flagconfig"
 	"app/user/internal/di/singleton"
 	"app/user/internal/lib/profiler"
 	"log"
 	"os"
 )
 
-func GetProfiler() *profiler.IProfiler {
-	return singleton.GlobalGetOrCreateTyped(func() *profiler.IProfiler {
-		f, err := os.Create("profiler.prof")
-		if err != nil {
-			log.Fatal(err)
-		}
+func GetProfiler() profiler.IProfiler {
+	return singleton.GlobalGetOrCreateTyped(
+		func() profiler.IProfiler {
 
-		obj := profiler.NewProfiler(f)
-		var iobj profiler.IProfiler = &obj
+			var iobj profiler.IProfiler
+			if flagconfig.GetFlagConfig().IsProfilerActive {
+				f, err := os.Create("profiler.prof")
+				if err != nil {
+					log.Fatal(err)
+				}
 
-		return &iobj
-	})
+				obj := profiler.NewProfiler(f)
+				iobj = &obj
+			} else {
+				obj := profiler.NewProfilerEmpty()
+				iobj = &obj
+			}
+
+			return iobj
+		},
+	)
 }

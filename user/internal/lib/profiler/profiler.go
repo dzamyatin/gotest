@@ -1,7 +1,9 @@
 package profiler
 
 import (
+	"fmt"
 	"io"
+	"runtime"
 	"runtime/pprof"
 )
 
@@ -31,6 +33,10 @@ func NewProfiler(writer io.Writer) Profiler {
 }
 
 func (p *Profiler) Start() {
+	fmt.Printf("Profiler is active \n")
+
+	runtime.SetBlockProfileRate(1)
+	runtime.SetMutexProfileFraction(1)
 	pprof.StartCPUProfile(p.writer)
 }
 

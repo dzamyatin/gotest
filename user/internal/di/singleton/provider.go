@@ -11,8 +11,11 @@ var (
 )
 
 func GlobalGetOrCreateTyped[T interface{}](create func() T) T {
-	var t T
-	return GlobalGetOrCreate(reflect.TypeOf(t).String(), create)
+	var tn string
+
+	tn = reflect.TypeOf((*T)(nil)).Elem().String()
+
+	return GlobalGetOrCreate(tn, create)
 }
 
 func GlobalGetOrCreate[T interface{}](name string, create func() T) T {

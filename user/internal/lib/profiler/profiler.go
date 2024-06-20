@@ -49,12 +49,17 @@ func (p ProfilerEmpty) Start() {}
 func (p ProfilerEmpty) Stop() {}
 
 type Profiler struct {
-	writer io.Writer
+	cpuWriter io.Writer
+	memWriter io.Writer
 }
 
-func NewProfiler(writer io.Writer) Profiler {
+func NewProfiler(
+	cpuWriter io.Writer,
+	memWriter io.Writer,
+) Profiler {
 	return Profiler{
-		writer: writer,
+		cpuWriter: cpuWriter,
+		memWriter: memWriter,
 	}
 }
 
@@ -63,7 +68,9 @@ func (p *Profiler) Start() {
 
 	runtime.SetBlockProfileRate(1)
 	runtime.SetMutexProfileFraction(1)
-	pprof.StartCPUProfile(p.writer)
+
+	pprof.StartCPUProfile(p.cpuWriter)
+	pprof.WriteHeapProfile(p.memWriter)
 }
 
 func (p *Profiler) Stop() {

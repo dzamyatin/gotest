@@ -23,16 +23,18 @@ grpc_user:
 
 test:
 	go test -v ./user/...
-tst:
-	go test -v ./tst/...
-tst_coverage:
-	go test -v ./tst/... -coverprofile="coverage.out"
-tst_coverage_res:
-	go tool cover -html="coverage.out"
+
+lint:
+	golangci-lint run
+	go vet ./...
+	shadow ./...
 
 #benchmark test https://habr.com/ru/articles/268585/
 test_b:
-	go test -bench=. -benchtime=1s -benchmem -cpuprofile=cpu.out -memprofile=mem.out -v ./tst/search
+	go test -race -bench=. -benchtime=1s -benchmem -cpuprofile=cpu.out -memprofile=mem.out -v ./tst/search
+#go tool pprof -svg ./perftest00.test ./cpu.out > cpu.svg
+test_b_see:
+	go tool pprof -http=:8088 cpu.out
 #go test -bench=. -benchmem bench_test.go > new.txt
 #git stash
 #go test -bench=. -benchmem bench_test.go > old.txt
@@ -47,6 +49,21 @@ test_b:
 #integration ?
 #exaple test
 
+
+
 #go test ./... -cover
+tst:
+	go test -v ./tst/...
 #go test ./... -coverprofile=coverage.txt
+tst_coverage:
+	go test -v ./tst/... -coverprofile="coverage.out"
 #go tool cover -html coverage.txt -o index.html
+#https://habr.com/ru/companies/badoo/articles/301990/
+tst_coverage_res:
+	go tool cover -html="coverage.out"
+
+
+prof_see:
+	go tool pprof  -http=:8088 ./user/var/cpuProfiler.prof
+prof_mem_see:
+	go tool pprof  -http=:8088 ./user/var/memProfiler.prof

@@ -13,16 +13,18 @@ var (
 	databaseName = "database"
 	migrationDir = configDir() + "/../../cmd/migrations"
 	//profile
-	isProfileActive = flagconfig.GetFlagConfig().IsProfilerActive
-	profileToFile   = varDir() + "/" + "profiler.prof"
+	isProfileActive  = flagconfig.GetFlagConfig().IsProfilerActive
+	cpuProfileToFile = varDir() + "/" + "cpuProfiler.prof"
+	memProfileToFile = varDir() + "/" + "memProfiler.prof"
 )
 
 type Config struct {
-	Path            string
-	DatabaseName    string
-	MigrationDir    string
-	IsProfileActive bool
-	ProfileToFile   string
+	Path             string
+	DatabaseName     string
+	MigrationDir     string
+	IsProfileActive  bool
+	CpuProfileToFile string
+	MemProfileToFile string
 }
 
 func GetConfig() *Config {
@@ -32,7 +34,8 @@ func GetConfig() *Config {
 			databaseName,
 			migrationDir,
 			isProfileActive,
-			profileToFile,
+			cpuProfileToFile,
+			memProfileToFile,
 		}
 	})
 }

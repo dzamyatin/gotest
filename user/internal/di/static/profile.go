@@ -15,12 +15,17 @@ func GetProfiler() profiler.IProfiler {
 			var iobj profiler.IProfiler
 			cfg := config.GetConfig()
 			if cfg.IsProfileActive {
-				f, err := os.Create(cfg.ProfileToFile)
+				fcpu, err := os.Create(cfg.CpuProfileToFile)
 				if err != nil {
 					log.Fatal(err)
 				}
 
-				obj := profiler.NewProfiler(f)
+				fmem, err := os.Create(cfg.MemProfileToFile)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				obj := profiler.NewProfiler(fcpu, fmem)
 				iobj = &obj
 			} else {
 				obj := profiler.NewProfilerEmpty()

@@ -1,6 +1,7 @@
 package profiler
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"runtime"
@@ -36,6 +37,7 @@ extension is the lower case name for the instruction set extension such as sse41
 type IProfiler interface {
 	Start()
 	Stop()
+	LabelCtxt(context.Context, ...string) context.Context
 }
 
 type ProfilerEmpty struct{}
@@ -47,6 +49,13 @@ func NewProfilerEmpty() ProfilerEmpty {
 func (p ProfilerEmpty) Start() {}
 
 func (p ProfilerEmpty) Stop() {}
+
+func (p ProfilerEmpty) LabelCtxt(
+	ctx context.Context,
+	label ...string,
+) context.Context {
+	return ctx
+}
 
 type Profiler struct {
 	cpuWriter io.Writer
@@ -75,4 +84,11 @@ func (p *Profiler) Start() {
 
 func (p *Profiler) Stop() {
 	pprof.StopCPUProfile()
+}
+
+func (p *Profiler) LabelCtxt(
+	ctx context.Context,
+	label ...string,
+) context.Context {
+	return pprof.WithLabels(ctx, pprof.Labels(label...))
 }

@@ -3,7 +3,7 @@ package handler
 import (
 	api "app/user/api/user/proto"
 	"app/user/internal/converter"
-	"app/user/internal/di/interceptor"
+	"app/user/internal/di/server/interceptor"
 	use_case2 "app/user/internal/use_case"
 	"context"
 	"google.golang.org/grpc/codes"

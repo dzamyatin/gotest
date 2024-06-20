@@ -3,8 +3,8 @@ package main
 import (
 	api "app/user/api/user/proto"
 	"app/user/internal/config/flagconfig"
-	"app/user/internal/di/interceptor"
 	"app/user/internal/di/server"
+	"app/user/internal/di/server/interceptor"
 	"app/user/internal/di/static"
 	_ "app/user/internal/lib"
 	"app/user/internal/lib/profiler"
@@ -43,7 +43,10 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(interceptor.SessionServerInterceptor),
+		grpc.ChainUnaryInterceptor(
+			interceptor.SessionServerInterceptor,
+			interceptor.InterceptorProfiler,
+		),
 	)
 	registerServers(grpcServer)
 

@@ -24,15 +24,15 @@ func (c FlagConfig) PrintHelp() {
 	flag.PrintDefaults()
 }
 
-func GetFlagConfig() *FlagConfig {
+func GetFlagConfig() FlagConfig {
 	return singleton.GlobalGetOrCreateTyped(
-		func() *FlagConfig {
+		func() FlagConfig {
 			if flag.Parsed() {
 				log.Fatal("Flag shouldn't be parsed already")
 			}
 
 			flag.Parse()
-			return &FlagConfig{
+			return FlagConfig{
 				IsProfilerActive: *isProfilerActive,
 				Port:             *port,
 				Help:             *help,

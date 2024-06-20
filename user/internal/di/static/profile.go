@@ -1,7 +1,7 @@
 package static
 
 import (
-	"app/user/internal/config/flagconfig"
+	"app/user/internal/config"
 	"app/user/internal/di/singleton"
 	"app/user/internal/lib/profiler"
 	"log"
@@ -13,8 +13,9 @@ func GetProfiler() profiler.IProfiler {
 		func() profiler.IProfiler {
 
 			var iobj profiler.IProfiler
-			if flagconfig.GetFlagConfig().IsProfilerActive {
-				f, err := os.Create("profiler.prof")
+			cfg := config.GetConfig()
+			if cfg.IsProfileActive {
+				f, err := os.Create(cfg.ProfileToFile)
 				if err != nil {
 					log.Fatal(err)
 				}

@@ -8,12 +8,22 @@ import (
 )
 
 var (
+	//database
 	path         = configDir() + "/../di/static/mydatabase.db"
 	databaseName = "database"
 	migrationDir = configDir() + "/../../cmd/migrations"
-
+	//profile
 	isProfileActive = flagconfig.GetFlagConfig().IsProfilerActive
+	profileToFile   = varDir() + "/" + "profiler.prof"
 )
+
+type Config struct {
+	Path            string
+	DatabaseName    string
+	MigrationDir    string
+	IsProfileActive bool
+	ProfileToFile   string
+}
 
 func GetConfig() *Config {
 	return singleton.GlobalGetOrCreateTyped(func() *Config {
@@ -21,17 +31,10 @@ func GetConfig() *Config {
 			path,
 			databaseName,
 			migrationDir,
-
 			isProfileActive,
+			profileToFile,
 		}
 	})
-}
-
-type Config struct {
-	Path            string
-	DatabaseName    string
-	MigrationDir    string
-	IsProfileActive bool
 }
 
 func NewConfig(
@@ -46,6 +49,10 @@ func NewConfig(
 		MigrationDir:    migrationDir,
 		IsProfileActive: isProfileActive,
 	}
+}
+
+func varDir() string {
+	return configDir() + "/../../var"
 }
 
 func configDir() string {

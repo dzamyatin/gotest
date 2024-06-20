@@ -14,8 +14,6 @@ import (
 )
 
 func main() {
-	//flag.Parse()
-
 	port := flagconfig.GetFlagConfig().Port
 
 	fmt.Printf("Listen: %v \n", port)

@@ -25,6 +25,8 @@ test:
 	go test -v ./user/...
 tst:
 	go test -v ./tst/...
+tst_coverage:
+	go test -v ./tst/... -coverprofile="coverage.out"
 
 #benchmark test https://habr.com/ru/articles/268585/
 test_b:

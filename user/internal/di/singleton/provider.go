@@ -1,4 +1,4 @@
-package static
+package singleton
 
 import (
 	"reflect"
@@ -10,12 +10,12 @@ var (
 	services = make(map[string]interface{})
 )
 
-func globalGetOrCreateTyped[T interface{}](create func() T) T {
+func GlobalGetOrCreateTyped[T interface{}](create func() T) T {
 	var t T
-	return globalGetOrCreate(reflect.TypeOf(t).String(), create)
+	return GlobalGetOrCreate(reflect.TypeOf(t).String(), create)
 }
 
-func globalGetOrCreate[T interface{}](name string, create func() T) T {
+func GlobalGetOrCreate[T interface{}](name string, create func() T) T {
 	s.RLock()
 	if res, ok := services[name]; ok {
 		s.RUnlock()

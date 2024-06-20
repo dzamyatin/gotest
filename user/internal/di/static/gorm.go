@@ -1,6 +1,8 @@
 package static
 
 import (
+	"app/user/internal/config"
+	"app/user/internal/di/singleton"
 	"app/user/internal/entity"
 	"context"
 	"gorm.io/driver/sqlite"
@@ -8,9 +10,9 @@ import (
 )
 
 func GetGorm() *gorm.DB {
-	return globalGetOrCreateTyped(
+	return singleton.GlobalGetOrCreateTyped(
 		func() *gorm.DB {
-			conf := GetDatabaseConfig()
+			conf := config.GetConfig()
 
 			db, err := gorm.Open(sqlite.Open(conf.Path), &gorm.Config{
 				ConnPool:             GetDB(), //Pool???

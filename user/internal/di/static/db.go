@@ -2,38 +2,18 @@ package static
 
 import (
 	"app/user/internal/config"
+	"app/user/internal/di/singleton"
 	"app/user/internal/lib"
 	"database/sql"
 	"github.com/golang-migrate/migrate/database/sqlite3"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
-	"path/filepath"
-	"runtime"
 )
 
-func GetDatabaseConfig() config.Config {
-	return globalGetOrCreateTyped(func() config.Config {
-		_, file, _, ok := runtime.Caller(0)
-
-		sourcePath := ""
-		if ok {
-			sourcePath += filepath.Dir(file) + "/mydatabase.db"
-		} else {
-			sourcePath = "./mydatabase.db"
-		}
-
-		return config.NewConfig(
-			sourcePath,
-			"database",
-			"user/cmd/migrations",
-		)
-	})
-}
-
 func GetDB() *sql.DB {
-	return globalGetOrCreateTyped(
+	return singleton.GlobalGetOrCreateTyped(
 		func() *sql.DB {
-			conf := GetDatabaseConfig()
+			conf := config.GetConfig()
 			DB, err := sql.Open("sqlite3", conf.Path)
 			if err != nil {
 				log.Fatal(err)
@@ -45,7 +25,7 @@ func GetDB() *sql.DB {
 }
 
 func GetMigrationService() *lib.MigrationService {
-	return globalGetOrCreateTyped(
+	return singleton.GlobalGetOrCreateTyped(
 		func() *lib.MigrationService {
 			ms := lib.MigrationService{}
 
@@ -58,7 +38,7 @@ func GetMigrationService() *lib.MigrationService {
 				log.Fatal(err)
 			}
 
-			ms.Folder = GetDatabaseConfig().MigrationDir
+			ms.Folder = config.GetConfig().MigrationDir
 
 			return &ms
 		},

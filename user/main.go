@@ -14,7 +14,9 @@ import (
 )
 
 var (
-	port = flag.Int("port", 9999, "Port to listen")
+	port       = flag.Int("port", 9999, "Port to listen")
+	cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	memprofile = flag.String("memprofile", "", "write mem profile to file")
 )
 
 func main() {

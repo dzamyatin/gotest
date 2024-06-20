@@ -2,6 +2,7 @@ package static
 
 import (
 	"app/user/cmd/command"
+	"app/user/internal/di/singleton"
 	"log"
 	"reflect"
 )
@@ -12,7 +13,7 @@ func GetCommandHandler() *command.CommandHandler {
 }
 
 func getCommandRegistry() *command.Registry {
-	return globalGetOrCreateTyped(
+	return singleton.GlobalGetOrCreateTyped(
 		func() *command.Registry {
 			registry := &command.Registry{}
 			for _, v := range getCommands() {
@@ -44,7 +45,7 @@ func GetMigrateCommand() *command.MigrateCommand {
 }
 
 func GetGormSchemaMigrationCommand() *command.GormSchemaMigrationCommand {
-	return globalGetOrCreateTyped(
+	return singleton.GlobalGetOrCreateTyped(
 		func() *command.GormSchemaMigrationCommand {
 			cmd := command.NewGormSchemaMigrationCommand(GetGorm(), GetGormEntities())
 			return &cmd

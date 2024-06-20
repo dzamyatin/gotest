@@ -1,8 +1,10 @@
 package main
 
-import (
-	"log"
-)
+import "fmt"
+
+type IPers interface {
+	setAge(age int)
+}
 
 type Person struct {
 	Name string
@@ -21,24 +23,58 @@ type Employee struct {
 	ID   int
 }
 
+func tst(a ...int) {
+	fmt.Println(a)
+}
+
 func main() {
-	p := Person{Name: "Alice", Age: 30}
+	arr := [3]int{1, 2, 3}
+	slice := []int{1, 2, 3}
+	m := map[int]int{1: 1, 2: 2, 3: 3}
+
+	e(arr, slice, m)
+
+	t := [3]int(slice)
+
+	tst(t[:]...)
+
+	fmt.Println([3]int(slice) == arr) //true
+	//fmt.Println(slice == slice) //build failed
+	//fmt.Println(m == m) //build failed
+
+	//p := Person{Name: "Alice", Age: 30}
 	//p2 := Person{Name: "Alice", Age: 30}
 	//e := Employee{Name: "Alice", Age: 30, ID: 123}
 
 	//log.Println(p == p2)
 
-	change2(p)
+	//var i interface{} = &p
+	//change2(&i)
 
-	log.Println(p.Age)
+	//change4(&p)
+
+	//log.Println(p.Age)
 }
 
-func change(p Person) {
-	p.Age = 31
-}
+//func change(p Person) {
+//	p.Age = 31
+//}
+//
+//func change2(p *interface{}) {
+//	t := (*p).(*Person)
+//
+//	t.setAge(31)
+//}
+//
+//func change3(p IPers) {
+//	p.setAge(31)
+//}
+//
+//func change4(p IPers) {
+//	g := p.(*Person)
+//	g.setAge(31)
+//}
 
-func change2(p interface{}) {
-	t := p.(Person)
-	t.Age = 31
-	t.setAge(31)
+func e(...interface{}) {
+
 }

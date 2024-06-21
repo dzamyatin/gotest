@@ -37,8 +37,22 @@ func main() {
 	fmt.Printf("Process: %v \n", os.Getpid())
 
 	listener, err := net.ListenTCP("tcp", &net.TCPAddr{Port: port})
+
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
+		return
+	}
+	//>>
+	//http.Handle("/metrics", promhttp.Handler())
+	//http.ListenAndServe(":2112", nil)
+	//<<
+	//prServ := http.Server{
+	//	Handler: handler
+	//}
+	//err = prServ.Serve(listener)
+
+	if err != nil {
+		log.Fatalf("Failed to listen prometeus: %v", err)
 		return
 	}
 

@@ -6,3 +6,7 @@ user
 - entity -> contain project entities
 - repository -> implement logic to create entities, to work with database
 - use_case -> actions
+
+
+# Prometheus
+https://prometheus.io/docs/guides/go-application/

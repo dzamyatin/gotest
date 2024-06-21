@@ -15,6 +15,8 @@ var (
 	memProfile         = flag.String("memprofile", directory.VarDir()+"/memProfiler.prof", "write mem profile to file")
 	serviceExternalUrl = flag.String("service_external_url", "http://localhost", "service url")
 	metricPort         = flag.Int("metric_port", 8998, "Port to listen http metric requests")
+	metricAuthUser     = flag.String("m_user", "test", "User to access metrics")
+	metricAuthPwd      = flag.String("m_pwd", "test", "Pwd to access metrics")
 )
 
 type FlagConfig struct {
@@ -25,6 +27,8 @@ type FlagConfig struct {
 	MemProfileFile     string
 	ServiceExternalUrl string
 	MetricPort         int
+	MetricAuthUser     string
+	MetricAuthPwd      string
 }
 
 func (c FlagConfig) PrintHelp() {
@@ -47,6 +51,8 @@ func GetFlagConfig() FlagConfig {
 				MemProfileFile:     *memProfile,
 				ServiceExternalUrl: *serviceExternalUrl,
 				MetricPort:         *metricPort,
+				MetricAuthUser:     *metricAuthUser,
+				MetricAuthPwd:      *metricAuthPwd,
 			}
 		},
 	)

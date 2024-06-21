@@ -10,3 +10,9 @@ user
 
 # Prometheus
 https://prometheus.io/docs/guides/go-application/
+
+
+
+go mod init github.com/dzamyatin/gotest
+go mod tidy
+go mod vendor

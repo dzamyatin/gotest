@@ -10,9 +10,11 @@ import (
 	"app/user/internal/lib/profiler"
 	"context"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -37,22 +39,10 @@ func main() {
 	fmt.Printf("Process: %v \n", os.Getpid())
 
 	listener, err := net.ListenTCP("tcp", &net.TCPAddr{Port: port})
+	defer listener.Close()
 
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
-		return
-	}
-	//>>
-	//http.Handle("/metrics", promhttp.Handler())
-	//http.ListenAndServe(":2112", nil)
-	//<<
-	//prServ := http.Server{
-	//	Handler: handler
-	//}
-	//err = prServ.Serve(listener)
-
-	if err != nil {
-		log.Fatalf("Failed to listen prometeus: %v", err)
 		return
 	}
 
@@ -64,8 +54,11 @@ func main() {
 	)
 	registerServers(grpcServer)
 
+	startMetricServer(ctx)
+
 	graceFullShutdown(grpcServer, listener, ctx, cancel, prof)
 
+	log.Print("Grpc is running...")
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatalf("GRPC failed to serve: %v", err)
@@ -78,6 +71,29 @@ func main() {
 
 func registerServers(grpcServer grpc.ServiceRegistrar) {
 	api.RegisterUserServer(grpcServer, server.GetUserServer())
+}
+
+func startMetricServer(ctx context.Context) {
+	mx := http.NewServeMux()
+	mx.Handle("/metrics", promhttp.Handler())
+	go func() {
+		metricPort := "8998"
+		fmt.Println("Metrics: " + metricPort)
+
+		metricServ := &http.Server{
+			Addr:    ":" + metricPort,
+			Handler: mx,
+			BaseContext: func(listener net.Listener) context.Context {
+				return ctx
+			},
+		}
+
+		errProm := metricServ.ListenAndServe()
+		if errProm != nil {
+			log.Fatalf("Failed to listen prometeus: %v", errProm)
+			return
+		}
+	}()
 }
 
 func graceFullShutdown(

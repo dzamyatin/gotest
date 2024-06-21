@@ -1,44 +1,26 @@
 package main
 
-import "fmt"
-
-type IPers interface {
-	setAge(age int)
-}
-
-type Person struct {
-	Name string
-	Age  int
-	//Ptr  []int
-	//Ptr map[int]int
-}
-
-func (p *Person) setAge(age int) {
-	p.Age = age
-}
-
-type Employee struct {
-	Name string
-	Age  int
-	ID   int
-}
-
-func tst(a ...int) {
-	fmt.Println(a)
-}
+import "log"
 
 func main() {
-	arr := [3]int{1, 2, 3}
-	slice := []int{1, 2, 3}
-	m := map[int]int{1: 1, 2: 2, 3: 3}
+	tst := 1
+	f := func(tst int) {
+		log.Println(tst)
+	}
+	defer f(tst)
+	tst = 2
 
-	e(arr, slice, m)
-
-	t := [3]int(slice)
-
-	tst(t[:]...)
-
-	fmt.Println([3]int(slice) == arr) //true
+	//arr := [3]int{1, 2, 3}
+	//slice := []int{1, 2, 3}
+	//m := map[int]int{1: 1, 2: 2, 3: 3}
+	//
+	//e(arr, slice, m)
+	//
+	//t := [3]int(slice)
+	//
+	//tst(t[:]...)
+	//
+	//fmt.Println([3]int(slice) == arr) //true
 	//fmt.Println(slice == slice) //build failed
 	//fmt.Println(m == m) //build failed
 
@@ -56,6 +38,30 @@ func main() {
 	//log.Println(p.Age)
 }
 
+//type IPers interface {
+//	setAge(age int)
+//}
+//
+//type Person struct {
+//	Name string
+//	Age  int
+//	//Ptr  []int
+//	//Ptr map[int]int
+//}
+//
+//func (p *Person) setAge(age int) {
+//	p.Age = age
+//}
+//
+//type Employee struct {
+//	Name string
+//	Age  int
+//	ID   int
+//}
+//
+//func tst(a ...int) {
+//	fmt.Println(a)
+//}
 //func change(p Person) {
 //	p.Age = 31
 //}

@@ -1,7 +1,7 @@
-.PHONY: grpc_user, migrate_create, start_console, start_user, tst
+.PHONY: grpc_user, migrate_create, start_console, start_user, tst, grpc, trace, trace_read
 
-start_user:
-	go run ./user/main.go --port 8999
+grpc:
+	GOGC=70 GOMEMLIMIT=50MiB go run ./user/main.go --port 8999
 
 start_console:
 	go run ./user/console/main.go $(ARG)
@@ -67,3 +67,9 @@ prof_see:
 	go tool pprof  -http=:8088 ./user/var/cpuProfiler.prof
 prof_mem_see:
 	go tool pprof  -http=:8088 ./user/var/memProfiler.prof
+
+
+trace_read:
+	go tool trace -http "0.0.0.0:8088" ./tracetest trace.out
+trace:
+	curl -o trace.out -u test:test http://localhost:8998/debug/pprof/trace?seconds=10

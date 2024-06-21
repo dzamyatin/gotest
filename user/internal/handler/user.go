@@ -88,7 +88,13 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 //	return fib(n-1) + fib(n-2)
 //}
 
+//var memLeak = []byte{}
+
 func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
+	//for i := 0; i < 10000000; i++ {
+	//	memLeak = append(memLeak, 0x16)
+	//}
+	//
 	//fib(40)
 
 	ses := interceptor.GetSession(ctx)

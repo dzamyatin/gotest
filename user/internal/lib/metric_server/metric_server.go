@@ -19,7 +19,8 @@ func StartMetricServer(ctx context.Context) {
 	mx.Handle("/metrics", promhttp.Handler())
 
 	metricPort := flagconfig.GetFlagConfig().MetricPort
-	fmt.Printf("Metrics: port: %d; user: %s; pwd: %s;\n", metricPort, flagconfig.GetFlagConfig().MetricAuthUser, flagconfig.GetFlagConfig().MetricAuthPwd)
+
+	help()
 
 	handler := newMiddlewareAuth(mx, func(writer http.ResponseWriter, request *http.Request, h http.Handler) {
 		if strings.HasPrefix(request.RequestURI, "/debug/") || strings.HasPrefix(request.RequestURI, "/metrics/") {
@@ -50,6 +51,20 @@ func StartMetricServer(ctx context.Context) {
 			return
 		}
 	}()
+}
+
+func help() {
+	fmt.Printf("**********\n")
+	fmt.Printf("Metrics: port: %d; user: %s; pwd: %s;\n", flagconfig.GetFlagConfig().MetricPort, flagconfig.GetFlagConfig().MetricAuthUser, flagconfig.GetFlagConfig().MetricAuthPwd)
+	url := fmt.Sprintf("%s:%d/debug/pprof/trace?seconds=10", flagconfig.GetFlagConfig().ServiceExternalUrl, flagconfig.GetFlagConfig().MetricPort)
+	fmt.Printf("trace: %s\n", url)
+	fmt.Printf(
+		"curl -o trace.out -u %s:%s %s \n",
+		flagconfig.GetFlagConfig().MetricAuthUser,
+		flagconfig.GetFlagConfig().MetricAuthPwd,
+		url,
+	)
+	fmt.Printf("**********\n")
 }
 
 func checkAuth(r *http.Request) bool {

@@ -10,6 +10,10 @@ func VarDir() string {
 }
 
 func ConfigDir() string {
+	return currDir() + "/.."
+}
+
+func currDir() string {
 	_, file, _, ok := runtime.Caller(0)
 
 	if ok {

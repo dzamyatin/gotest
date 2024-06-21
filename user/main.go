@@ -15,8 +15,10 @@ import (
 	"log"
 	"net"
 	"net/http"
+	_ "net/http/pprof" //Register debug request listeners
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -50,6 +52,7 @@ func main() {
 		grpc.ChainUnaryInterceptor(
 			interceptor.SessionServerInterceptor,
 			interceptor.InterceptorProfiler,
+			interceptor.InterceptorTrace,
 		),
 	)
 	registerServers(grpcServer)
@@ -74,15 +77,32 @@ func registerServers(grpcServer grpc.ServiceRegistrar) {
 }
 
 func startMetricServer(ctx context.Context) {
-	mx := http.NewServeMux()
-	mx.Handle("/metrics", promhttp.Handler())
-	go func() {
-		metricPort := "8998"
-		fmt.Println("Metrics: " + metricPort)
+	mx := http.DefaultServeMux
 
+	//prometheus runtime metrics,
+	mx.Handle("/metrics", promhttp.Handler())
+
+	metricPort := flagconfig.GetFlagConfig().MetricPort
+	fmt.Printf("Metrics: %d\n", metricPort)
+
+	handler := newMiddlewareAuth(mx, func(writer http.ResponseWriter, request *http.Request, h http.Handler) {
+		if strings.HasPrefix(request.RequestURI, "/debug/") || strings.HasPrefix(request.RequestURI, "/metrics/") {
+			if !checkAuth(request) {
+				writer.Header().Set("WWW-Authenticate", `Basic realm="Restricted Area"`)
+				writer.WriteHeader(401)
+				writer.Write([]byte("Resource portected"))
+				return
+			}
+		}
+
+		h.ServeHTTP(writer, request)
+	})
+
+	//run server
+	go func() {
 		metricServ := &http.Server{
-			Addr:    ":" + metricPort,
-			Handler: mx,
+			Addr:    fmt.Sprintf(":%d", metricPort),
+			Handler: handler,
 			BaseContext: func(listener net.Listener) context.Context {
 				return ctx
 			},
@@ -94,6 +114,33 @@ func startMetricServer(ctx context.Context) {
 			return
 		}
 	}()
+}
+
+func checkAuth(r *http.Request) bool {
+	u, pwd, ok := r.BasicAuth()
+
+	if !ok {
+		return false
+	}
+
+	if u == "test" && pwd == "test" {
+		return true
+	}
+
+	return false
+}
+
+type middlewareAuth struct {
+	h  http.Handler
+	fn func(writer http.ResponseWriter, request *http.Request, h http.Handler)
+}
+
+func newMiddlewareAuth(h http.Handler, fn func(writer http.ResponseWriter, request *http.Request, h http.Handler)) middlewareAuth {
+	return middlewareAuth{h: h, fn: fn}
+}
+
+func (m middlewareAuth) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	m.fn(writer, request, m.h)
 }
 
 func graceFullShutdown(

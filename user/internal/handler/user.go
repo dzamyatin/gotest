@@ -81,7 +81,16 @@ func (s UserServer) GetAll(context context.Context, request *api.UserGetAllReque
 	return &response, nil
 }
 
+//func fib(n int) int {
+//	if n <= 1 {
+//		return n
+//	}
+//	return fib(n-1) + fib(n-2)
+//}
+
 func (s UserServer) Update(ctx context.Context, req *api.UserUpdateRequest) (*api.UserUpdateResponse, error) {
+	//fib(40)
+
 	ses := interceptor.GetSession(ctx)
 	err := ses.GetUpdateUserUseCase().Exec(converter.UserUpdateRequestToUpdateUserInput(req))
 

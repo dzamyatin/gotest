@@ -7,6 +7,7 @@ import (
 )
 
 func InterceptorProfiler(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+	//dont know what the point to lablel context. dont see a result
 	ctx = static.GetProfiler().LabelCtxt(
 		ctx,
 		"grpc",

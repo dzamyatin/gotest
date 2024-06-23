@@ -16,3 +16,16 @@ https://prometheus.io/docs/guides/go-application/
 go mod init github.com/dzamyatin/gotest
 go mod tidy
 go mod vendor
+
+
+
+
+
+go build -gcflags=-m main.go
+
+#Trace
+https://habr.com/ru/articles/742402/
+
+
+# Mock
+mockgen -source=/home/dzamyatin/GolandProjects/newGame/vendor/gorm.io/gorm/gorm.go -destination=user/internal/mock_gorm.go -package=app

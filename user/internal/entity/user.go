@@ -20,12 +20,12 @@ func InitUser(
 	}
 }
 
-func (u User) CheckPassword(password string) bool {
+func (u *User) CheckPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword(u.PasswordHash, []byte(password))
 
 	return err == nil
 }
 
-func (u User) SetPassword(password string) {
+func (u *User) SetPassword(password string) {
 	u.PasswordHash, _ = bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }

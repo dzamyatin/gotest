@@ -2,6 +2,7 @@ package use_case
 
 import (
 	"app/user/internal/entity"
+	"database/sql"
 	"gorm.io/gorm"
 )
 
@@ -11,37 +12,41 @@ type UpdateUserInput struct {
 	Password *string
 }
 
-type UpdateUserUseCase struct {
-	gorm *gorm.DB
+type DB interface {
+	Take(interface{}, ...interface{}) (tx *gorm.DB)
+	Save(interface{}) *gorm.DB
+	Begin(...*sql.TxOptions) *gorm.DB
+	Commit() *gorm.DB
 }
 
-func NewUpdateUserUseCase(gorm *gorm.DB) UpdateUserUseCase {
-	return UpdateUserUseCase{gorm: gorm}
+type UpdateUserUseCase struct {
+	db DB
+}
+
+func NewUpdateUserUseCase(db DB) UpdateUserUseCase {
+	return UpdateUserUseCase{db: db}
 }
 
 func (u UpdateUserUseCase) Exec(updateUserInput UpdateUserInput) error {
 	user := &entity.User{}
-	u.gorm.Take(user, updateUserInput.Uid)
+
+	u.db.Take(user, updateUserInput.Uid)
 
 	if user.Uid.ID() == 0 {
 		return nil
 	}
 
-	err := u.gorm.Transaction(
-		func(tx *gorm.DB) error {
-			if updateUserInput.Login != nil {
-				user.Login = *updateUserInput.Login
-			}
+	if updateUserInput.Login != nil {
+		user.Login = *updateUserInput.Login
+	}
 
-			if updateUserInput.Password != nil {
-				user.SetPassword(*updateUserInput.Password)
-			}
+	if updateUserInput.Password != nil {
+		user.SetPassword(*updateUserInput.Password)
+	}
 
-			u.gorm.Save(user)
+	u.db.Begin()
+	u.db.Save(user)
+	u.db.Commit()
 
-			return nil
-		},
-	)
-
-	return err
+	return nil
 }

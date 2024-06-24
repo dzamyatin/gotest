@@ -27,7 +27,10 @@ func StartMetricServer(ctx context.Context) {
 			if !checkAuth(request) {
 				writer.Header().Set("WWW-Authenticate", `Basic realm="Restricted Area"`)
 				writer.WriteHeader(401)
-				writer.Write([]byte("Resource portected"))
+				_, err := writer.Write([]byte("Resource portected"))
+				if err != nil {
+					log.Println(err)
+				}
 				return
 			}
 		}

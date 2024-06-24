@@ -29,3 +29,10 @@ https://habr.com/ru/articles/742402/
 
 # Mock
 mockgen -source=/home/dzamyatin/GolandProjects/newGame/vendor/gorm.io/gorm/gorm.go -destination=user/internal/mock_gorm.go -package=app
+
+
+#Table test t.Run(...)
+https://habr.com/ru/companies/otus/articles/741618/
+
+
+To confirm if autovacuum is enabled, you can check the postgresql.conf file in your PostgreSQL installation directory (e.g., /etc/postgresql/12/main/postgresql.conf).

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"log"
 	"runtime"
 	"runtime/pprof"
 )
@@ -78,8 +79,14 @@ func (p *Profiler) Start() {
 	runtime.SetBlockProfileRate(1)
 	runtime.SetMutexProfileFraction(1)
 
-	pprof.StartCPUProfile(p.cpuWriter)
-	pprof.WriteHeapProfile(p.memWriter)
+	err := pprof.StartCPUProfile(p.cpuWriter)
+	if err != nil {
+		log.Fatal("Write cpu profiling started error")
+	}
+	err = pprof.WriteHeapProfile(p.memWriter)
+	if err != nil {
+		log.Fatal("Write heap profiling started error")
+	}
 }
 
 func (p *Profiler) Stop() {

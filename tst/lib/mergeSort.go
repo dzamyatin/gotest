@@ -53,10 +53,10 @@ func QuickSortAsync(base []int, order SortOrder) []int {
 	return append(left, right...)
 }
 
-var metric = 0
+//var metric = 0
 
 func makeParts(list []int, order SortOrder) (left []int, right []int) {
-	metric++
+	//metric++
 	var minimum int
 	var maximum int
 

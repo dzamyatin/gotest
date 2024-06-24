@@ -5,8 +5,8 @@ import (
 )
 
 type Arg struct {
-	code  string
-	index int
+	code string
+	//index int
 }
 
 type Input struct {

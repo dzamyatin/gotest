@@ -7,8 +7,10 @@ import (
 	"log"
 )
 
+type SessionKey string
+
 const (
-	sessionKey = "sessionKey"
+	sessionKey = SessionKey("sessionKey")
 )
 
 func SessionServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {

@@ -11,9 +11,7 @@ var (
 )
 
 func GlobalGetOrCreateTyped[T interface{}](create func() T) T {
-	var tn string
-
-	tn = reflect.TypeOf((*T)(nil)).Elem().String()
+	tn := reflect.TypeOf((*T)(nil)).Elem().String()
 
 	return GlobalGetOrCreate(tn, create)
 }

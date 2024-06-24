@@ -79,5 +79,5 @@ FROM users
 		users = append(users, user)
 	}
 
-	return users, nil
+	return users, err
 }

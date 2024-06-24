@@ -40,7 +40,11 @@ func (c CreateUserUseCase) Execute(i interface{}) {
 		fmt.Printf("Unexpected execution type: %v", i)
 	}
 
-	c.Exec(input)
+	_, err := c.Exec(input)
+
+	if err != nil {
+		fmt.Printf("Unexpected error for user %v: %v", input.Login, err)
+	}
 }
 
 func NewCreateUserUseCase(userRepository repository.UserRepositoryInterface) CreateUserUseCase {

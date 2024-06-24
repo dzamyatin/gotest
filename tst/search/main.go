@@ -14,7 +14,7 @@ func main() {
 	res := bTree.Sort(lib.ASC)
 	fmt.Println("")
 	fmt.Println(res)
-	fmt.Printf("Time: %s", time.Now().Sub(t))
+	fmt.Printf("Time: %s", time.Since(t))
 
 	//fmt.Println(values)
 	//fmt.Println(res.sort())

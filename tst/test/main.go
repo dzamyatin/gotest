@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancelFn := context.WithTimeout(context.Background(), 2*time.Second)
 	group, _ := errgroup.WithContext(ctx)
 	//group := errgroup.Group{}
 
@@ -20,6 +20,7 @@ func main() {
 		group.Go(func() error {
 			select {
 			case <-ctx.Done():
+				cancelFn()
 				return nil
 			default:
 				log.Println(i)

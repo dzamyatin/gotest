@@ -7,7 +7,7 @@ func SlowSort(base []int, order SortOrder) []int {
 	skipList := make(map[int]interface{})
 	result := make([]int, len(base))
 
-	for index, _ := range result {
+	for index := range result {
 		firstElement := true
 
 		for k, v := range base {

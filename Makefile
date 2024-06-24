@@ -24,8 +24,10 @@ grpc_user:
 test:
 	go test -v ./user/...
 
+#curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.59.1
+#https://golangci-lint.run/
 lint:
-	golangci-lint run
+	golangci-lint run ./...
 	go vet ./...
 	shadow ./...
 
@@ -73,3 +75,6 @@ trace_read:
 	go tool trace -http "0.0.0.0:8088" ./tracetest trace.out
 trace:
 	curl -o trace.out -u test:test http://localhost:8998/debug/pprof/trace?seconds=10
+
+
+

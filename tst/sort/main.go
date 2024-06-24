@@ -28,7 +28,7 @@ func main() {
 		//testSort(v, 100000000, 2)
 		testSort(v.callback, 20, 200)
 
-		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Now().Sub(t))
+		fmt.Printf("Time: %s \n-------------------------------------------\n", time.Since(t))
 	}
 
 }

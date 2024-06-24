@@ -38,7 +38,12 @@ func main() {
 	fmt.Printf("Process: %v \n", os.Getpid())
 
 	listener, err := net.ListenTCP("tcp", &net.TCPAddr{Port: port})
-	defer listener.Close()
+	defer func() {
+		errInner := listener.Close()
+		if errInner != nil {
+			fmt.Printf("Error to close listener")
+		}
+	}()
 
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)

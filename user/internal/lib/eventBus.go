@@ -19,8 +19,8 @@ type EventBusInterface interface {
 }
 
 type EventBus struct {
-	bus    *eventbus.EventBus
-	events []EventHandler
+	bus *eventbus.EventBus
+	//events []EventHandler
 }
 
 func (b EventBus) Subscribe(handler EventHandler) {

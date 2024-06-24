@@ -1,6 +1,9 @@
 package lib
 
-import "sync"
+import (
+	"log"
+	"sync"
+)
 
 type TreeNode struct {
 	leftLeaf  *TreeNode
@@ -18,7 +21,7 @@ func NewTreeNode(value int) *TreeNode {
 
 func (t *TreeNode) GetValues() []int {
 	res := make([]int, t.count)
-	for k, _ := range res {
+	for k := range res {
 		res[k] = t.value
 	}
 
@@ -78,6 +81,8 @@ func (t *TreeNode) AsyncSort(order SortOrder) []int {
 
 		wg.Wait()
 	} else {
+		//@TODO add desc
+		log.Fatal("Not implemented yet")
 		//if t.rightLeaf != nil {
 		//	res = append(res, t.rightLeaf.Sort(order)...)
 		//}

@@ -29,5 +29,9 @@ func main() {
 		})
 	}
 
-	group.Wait()
+	err := group.Wait()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -15,12 +15,12 @@ func main() {
 }
 
 var MORSE_CODE = map[string]string{
-	"····": "H",
-	"·":    "E",
-	"−·−−": "Y",
-	"·−−−": "J",
-	"··−":  "U",
-	"−··":  "D",
+	"....": "H",
+	".":    "E",
+	"-.--": "Y",
+	".---": "J",
+	"..-":  "U",
+	"-..":  "D",
 }
 
 func DecodeMorse(morseCode string) string {
@@ -45,7 +45,13 @@ func DecodeMorse(morseCode string) string {
 			spaceCounter = 0
 		}
 
-		if v == ' ' || k == len(morseCode)-1 {
+		isLast := k == len(morseCode)-1
+
+		if v == ' ' || isLast {
+			if isLast {
+				buf = append(buf, v)
+			}
+
 			if len(buf) > 0 {
 				res.WriteString(getChar(buf))
 			}
@@ -101,9 +107,9 @@ func DecodeBits(bits string) string {
 			if buf == '1' {
 				switch mod {
 				case 1:
-					res.WriteString("·")
+					res.WriteString(".")
 				case 3:
-					res.WriteString("−")
+					res.WriteString("-")
 				}
 			}
 

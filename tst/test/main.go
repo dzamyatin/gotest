@@ -22,6 +22,10 @@ func main() {
 	res = DecodeBits("10001")
 	log.Println(string(res))
 	log.Println(DecodeMorse(res))
+	//
+	res = DecodeBits("1110111") //.. ._.
+	log.Println(string(res))
+	log.Println(DecodeMorse(res))
 
 }
 
@@ -33,6 +37,7 @@ var MORSE_CODE = map[string]string{
 	".---": "J",
 	"..-":  "U",
 	"-..":  "D",
+	"--":   "M",
 }
 
 func DecodeMorse(morseCode string) string {
@@ -88,13 +93,16 @@ func getChar(buf []rune) string {
 		return v
 	}
 	panic(fmt.Sprintf(
-		"there is no char in table %s %s",
+		"there is no char in table %s '%s'",
 		MORSE_CODE,
 		string(buf),
 	))
 }
 
 func DecodeBits(bits string) string {
+
+	fmt.Printf(bits)
+
 	b := []byte(bits)
 
 	unit := getUnitSize(b)
@@ -108,36 +116,8 @@ func DecodeBits(bits string) string {
 			buf = v
 		}
 
-		isLast := k == (len(b) - 1)
-
-		if buf != v || isLast {
-			if isLast {
-				if buf == v {
-					cnt++
-				} else {
-					buf = v
-					cnt = 1
-				}
-			}
-
-			mod := cnt / unit
-			if buf == '1' {
-				switch mod {
-				case 1:
-					res.WriteString(".")
-				case 3:
-					res.WriteString("-")
-				}
-			}
-
-			if buf == '0' {
-				switch mod {
-				case 3:
-					res.WriteString(" ")
-				case 7:
-					res.WriteString("   ")
-				}
-			}
+		if buf != v {
+			res.WriteString(convert(buf, cnt, unit))
 
 			buf = v
 			cnt = 1
@@ -147,19 +127,51 @@ func DecodeBits(bits string) string {
 		cnt++
 	}
 
+	res.WriteString(convert(buf, cnt, unit))
+
 	return res.String()
 }
 
-func getUnitSize(bits []byte) int {
-	min0, mid0, max0, min1, max1 := getSizeStat(bits)
-	//_, _, _, min1, max1 := getSizeStat(bits)
+func convert(buf byte, cnt int, unit int) string {
+	mod := cnt / unit
 
-	if min0 != 0 && max0 != 0 && mid0 != 0 && (mid0 > min0 && mid0 < max0) {
+	if buf == '1' {
+		switch mod {
+		case 1:
+			return "."
+		case 3:
+			return "-"
+		}
+	}
+
+	if buf == '0' {
+		switch mod {
+		case 3:
+			return " "
+		case 7:
+			return "   "
+		}
+	}
+
+	return ""
+}
+
+func getUnitSize(bits []byte) int {
+	min0, _, _, min1, _ := getSizeStat(bits)
+
+	if min0 != 0 && min1 != 0 {
+		if min1 < min0 {
+			return min1
+		}
 		return min0
 	}
 
-	if min1 != 0 && max1 != 0 {
+	if min1 != 0 {
 		return min1
+	}
+
+	if min0 != 0 {
+		return min0
 	}
 
 	panic("fail to guess unit size")

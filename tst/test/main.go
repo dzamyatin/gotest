@@ -152,13 +152,14 @@ func DecodeBits(bits string) string {
 
 func getUnitSize(bits []byte) int {
 	min0, mid0, max0, min1, max1 := getSizeStat(bits)
+	//_, _, _, min1, max1 := getSizeStat(bits)
+
+	if min0 != 0 && max0 != 0 && mid0 != 0 && (mid0 > min0 && mid0 < max0) {
+		return min0
+	}
 
 	if min1 != 0 && max1 != 0 {
 		return min1
-	}
-
-	if min0 != 0 && max0 != 0 && mid0 != 0 {
-		return min0
 	}
 
 	panic("fail to guess unit size")

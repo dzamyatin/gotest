@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	res := DecodeBits("1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011")
+	//res := DecodeBits("1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011")
+	res := DecodeBits("111100000000000000000000000000001111")
 	log.Println(string(res))
 	log.Println(DecodeMorse(res))
 
@@ -136,12 +137,12 @@ func DecodeBits(bits string) string {
 func getUnitSize(bits []byte) int {
 	min0, max0, min1, mid1, max1 := getSizeStat(bits)
 
-	if min0 != 0 && max0 != 0 {
-		return min0
-	}
-
 	if min1 != 0 && max1 != 0 && mid1 != 0 {
 		return min1
+	}
+
+	if min0 != 0 && max0 != 0 {
+		return min0
 	}
 
 	panic("fail to guess unit size")

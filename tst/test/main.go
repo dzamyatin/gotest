@@ -18,6 +18,10 @@ func main() {
 	res = DecodeBits("101")
 	log.Println(string(res))
 	log.Println(DecodeMorse(res))
+	//
+	res = DecodeBits("10001")
+	log.Println(string(res))
+	log.Println(DecodeMorse(res))
 
 }
 
@@ -108,7 +112,12 @@ func DecodeBits(bits string) string {
 
 		if buf != v || isLast {
 			if isLast {
-				cnt++
+				if buf == v {
+					cnt++
+				} else {
+					buf = v
+					cnt = 1
+				}
 			}
 
 			mod := cnt / unit
@@ -142,13 +151,13 @@ func DecodeBits(bits string) string {
 }
 
 func getUnitSize(bits []byte) int {
-	min0, max0, min1, mid1, max1 := getSizeStat(bits)
+	min0, mid0, max0, min1, max1 := getSizeStat(bits)
 
-	if min1 != 0 && max1 != 0 && mid1 != 0 {
+	if min1 != 0 && max1 != 0 {
 		return min1
 	}
 
-	if min0 != 0 && max0 != 0 {
+	if min0 != 0 && max0 != 0 && mid0 != 0 {
 		return min0
 	}
 
@@ -157,9 +166,10 @@ func getUnitSize(bits []byte) int {
 
 func getSizeStat(bits []byte) (
 	min0 int,
+	mid0 int,
 	max0 int,
 	min1 int,
-	mid1 int,
+	//mid1 int,
 	max1 int,
 ) {
 	buf := byte(0)
@@ -184,15 +194,16 @@ func getSizeStat(bits []byte) (
 				if cnt > max0 || max0 == 0 {
 					max0 = cnt
 				}
+
+				if (cnt > min0 && cnt < max0) || mid0 == 0 {
+					mid0 = cnt
+				}
 			} else {
 				if cnt < min1 || min1 == 0 {
 					min1 = cnt
 				}
 				if cnt > max1 || max1 == 0 {
 					max1 = cnt
-				}
-				if (cnt > min1 && cnt < max1) || mid1 == 0 {
-					mid1 = cnt
 				}
 			}
 

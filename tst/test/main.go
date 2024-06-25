@@ -9,6 +9,58 @@ import (
 func main() {
 	res := DecodeBits("1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011")
 	log.Println(string(res))
+	log.Println(DecodeMorse(res))
+
+}
+
+var MORSE_CODE = map[string]string{
+	"····": "H",
+	"·":    "E",
+	"−·−−": "Y",
+	"·−−−": "J",
+	"··−":  "U",
+	"−··":  "D",
+}
+
+func DecodeMorse(morseCode string) string {
+
+	var buf []rune
+
+	res := strings.Builder{}
+
+	spaceCounter := 0
+	for k, v := range morseCode {
+
+		if v == ' ' {
+			spaceCounter++
+		}
+
+		if spaceCounter == 3 {
+			res.WriteString(" ")
+			spaceCounter = 0
+		}
+
+		if v != ' ' {
+			spaceCounter = 0
+		}
+
+		if v == ' ' || k == len(morseCode)-1 {
+			if len(buf) > 0 {
+				res.WriteString(MORSE_CODE[string(buf)])
+			}
+
+			buf = []rune{}
+			continue
+		}
+
+		buf = append(buf, v)
+	}
+
+	if len(buf) > 0 {
+		res.WriteString(MORSE_CODE[string(buf)])
+	}
+
+	return res.String()
 }
 
 func DecodeBits(bits string) string {
@@ -37,7 +89,7 @@ func DecodeBits(bits string) string {
 			if buf == '1' {
 				switch mod {
 				case 1:
-					res.WriteString(".")
+					res.WriteString("·")
 				case 3:
 					res.WriteString("−")
 				default:

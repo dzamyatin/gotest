@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	_ "golang.org/x/sync/errgroup"
 	"log"
 	"strings"
@@ -46,7 +47,7 @@ func DecodeMorse(morseCode string) string {
 
 		if v == ' ' || k == len(morseCode)-1 {
 			if len(buf) > 0 {
-				res.WriteString(MORSE_CODE[string(buf)])
+				res.WriteString(getChar(buf))
 			}
 
 			buf = []rune{}
@@ -57,10 +58,22 @@ func DecodeMorse(morseCode string) string {
 	}
 
 	if len(buf) > 0 {
-		res.WriteString(MORSE_CODE[string(buf)])
+		res.WriteString(getChar(buf))
 	}
 
 	return res.String()
+}
+
+func getChar(buf []rune) string {
+	v, ok := MORSE_CODE[string(buf)]
+	if ok {
+		return v
+	}
+	panic(fmt.Sprintf(
+		"there is no char in table %s %s",
+		MORSE_CODE,
+		string(buf),
+	))
 }
 
 func DecodeBits(bits string) string {
@@ -69,7 +82,6 @@ func DecodeBits(bits string) string {
 	unit := getUnitSize(b)
 
 	res := strings.Builder{}
-	//var res []uint16
 
 	buf := byte(0)
 	cnt := 0
@@ -92,8 +104,6 @@ func DecodeBits(bits string) string {
 					res.WriteString("·")
 				case 3:
 					res.WriteString("−")
-				default:
-					//res.WriteString(fmt.Sprintf("X(%d)", mod))
 				}
 			}
 
@@ -103,8 +113,6 @@ func DecodeBits(bits string) string {
 					res.WriteString(" ")
 				case 7:
 					res.WriteString("   ")
-				default:
-					//res.WriteString(fmt.Sprintf("Y(%d)", mod))
 				}
 			}
 

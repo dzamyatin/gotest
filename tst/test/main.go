@@ -38,7 +38,7 @@ func ExpSum(n uint64) uint64 {
 		}
 		for j := uint64(1); j <= uint64(len(nums)); j++ {
 			for t := uint64(1); t <= uint64(len(nums)); t++ {
-				resultMap[createKey(elementByPartition(nums, i, j, t-1))] = struct{}{}
+				resultMap[createKey(elementByPartition(nums, i, -j, t-1))] = struct{}{}
 			}
 		}
 	}

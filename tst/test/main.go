@@ -3,29 +3,28 @@ package main
 import (
 	"fmt"
 	_ "golang.org/x/sync/errgroup"
-	"strings"
 )
 
 func main() {
 	fmt.Println(
-		duplicate_count("abcde"),
-		duplicate_count("abcdea"),
-		duplicate_count("abcdeaB11"),
-		duplicate_count("indivisibility"),
+		Solution("abcde"),
 	)
 }
 
-func duplicate_count(s1 string) int {
-	s1 = strings.ToLower(s1)
-	r := []rune(s1)
-	m := make(map[rune]int, len(r))
+func Solution(str string) []string {
+	res := []string{}
+	buf := []rune{}
 
-	res := 0
-	for _, v := range r {
-		if c, ok := m[v]; ok && c == 1 {
-			res++
+	for _, v := range str {
+		buf = append(buf, v)
+		if len(buf) == 2 {
+			res = append(res, string(buf))
+			buf = []rune{}
 		}
-		m[v]++
+	}
+
+	if len(buf) != 0 {
+		res = append(res, string(buf)+"_")
 	}
 
 	return res

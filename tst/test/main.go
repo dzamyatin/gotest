@@ -49,62 +49,90 @@ func SumOfIntervals(intervals [][2]int) int {
 
 	sort.Ints(l)
 
-	//tst := 0
-	tstI := 0
-	//skip := 0
-
 	for j := 0; j < len(l); j++ {
-		//if l[j] <= skip {
-		//	continue
-		//}
+
+		currIntervalIndex := 0
+		currIntervalFound := false
 
 		for i := 0; i < len(intervals); i++ {
 			if l[j] == intervals[i][0] {
-				//tst = intervals[i][1]
-				tstI = i
+				currIntervalIndex = i
+				currIntervalFound = true
 				break
 			}
+		}
+
+		if !currIntervalFound {
+			continue
 		}
 
 		if j == len(l)-1 {
 			break
 		}
 
-		//if l[j+1] == tst {
-		//	continue
-		//}
-
 		for i := 0; i < len(intervals); i++ {
-			if l[j+1] == intervals[i][0] {
-				//<<<
-				r := append(
-					[][2]int{},
-					intervals[:tstI]...,
-				)
+			if currIntervalIndex == i {
+				continue
+			}
 
+			//1,2
+			//2,4
+			if intervals[currIntervalIndex][0] <= intervals[i][0] &&
+				intervals[currIntervalIndex][1] >= intervals[i][0] {
+				r := [][2]int{}
+
+				//left border
+				if currIntervalIndex < i {
+					if currIntervalIndex-1 > 0 {
+						r = append(
+							r,
+							intervals[:currIntervalIndex-1]...,
+						)
+					}
+				} else {
+					if i-1 > 0 {
+						r = append(
+							r,
+							intervals[:i-1]...,
+						)
+					}
+				}
+
+				//new
 				r = append(
 					r,
 					[2]int{
-						intervals[tstI][0],
+						intervals[currIntervalIndex][0],
 						intervals[i][1],
 					},
 				)
 
-				//skip = intervals[i][1]
-
-				if tstI+1 < i {
-					r = append(
-						r,
-						intervals[tstI+1:i]...,
-					)
-				}
-
-				intervals = append(
+				//middle
+				r = append(
 					r,
-					intervals[i+1:]...,
+					intervals[currIntervalIndex+1:i]...,
 				)
 
-				//j = 0
+				//right border
+				if currIntervalIndex > i {
+					if currIntervalIndex+1 <= len(intervals)-1 {
+						r = append(
+							r,
+							intervals[currIntervalIndex+1:]...,
+						)
+					}
+				} else {
+					if i+1 <= len(intervals)-1 {
+						r = append(
+							r,
+							intervals[i+1:]...,
+						)
+					}
+				}
+
+				intervals = r
+
+				j = -1
 				break
 			}
 		}

@@ -3,88 +3,113 @@ package main
 import (
 	"fmt"
 	_ "golang.org/x/sync/errgroup"
+	"log"
+	"sort"
 )
 
 func main() {
+
+	//tst := []int{
+	//	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+	//}
+	//fmt.Println(tst[2:3])
+	//return
 	fmt.Println(
-		Solution("хуй"),
+		SumOfIntervals(
+			[][2]int{
+				{1, 4},
+				{3, 5},
+				{7, 10},
+			},
+		),
+		SumOfIntervals(
+			[][2]int{
+				{1, 4},
+				{7, 10},
+				{3, 5},
+			},
+		),
+
+		SumOfIntervals(
+			[][2]int{
+				{1, 2},
+				{2, 3},
+				{3, 4},
+			},
+		),
 	)
 }
 
-func Solution(str string) []string {
-	res := []string{}
-	s := []rune(str)
+func SumOfIntervals(intervals [][2]int) int {
+	var l []int
 
-	if len(s)%2 != 0 {
-		s = append(s, '_')
+	for _, v := range intervals {
+		l = append(l, v[:]...)
 	}
 
-	for i := 1; i < len(s); i += 2 {
-		res = append(res, string(s[i-1])+string(s[i]))
-	}
+	sort.Ints(l)
 
-	return res
-}
+	//tst := 0
+	tstI := 0
+	//skip := 0
 
-func Solution4(str string) []string {
-	res := []string{}
+	for j := 0; j < len(l); j++ {
+		//if l[j] <= skip {
+		//	continue
+		//}
 
-	buf := 0
-	for k, v := range str {
-		if k%2 == 0 {
-			res = append(res, string(v))
-			buf = len(res) - 1
-			continue
+		for i := 0; i < len(intervals); i++ {
+			if l[j] == intervals[i][0] {
+				//tst = intervals[i][1]
+				tstI = i
+				break
+			}
 		}
-		res[buf] += string(v)
-	}
 
-	if len(res[buf]) == 1 {
-		res[buf] += "_"
-	}
-
-	return res
-}
-
-func Solution3(str string) []string {
-	res := [][]rune{}
-	var buf []rune
-
-	cal := 0
-	for _, v := range str {
-		if cal == 0 {
-			buf = []rune{v, '_'}
-			res = append(res, buf)
-		} else {
-			buf[cal] = v
-			cal = -1
+		if j == len(l)-1 {
+			break
 		}
-		cal++
-	}
 
-	f := []string{}
-	for _, v := range res {
-		f = append(f, string(v))
-	}
+		//if l[j+1] == tst {
+		//	continue
+		//}
 
-	return f
-}
+		for i := 0; i < len(intervals); i++ {
+			if l[j+1] == intervals[i][0] {
+				//<<<
+				r := append(
+					[][2]int{},
+					intervals[:tstI]...,
+				)
 
-func Solution2(str string) []string {
-	res := []string{}
-	buf := []rune{}
+				r = append(
+					r,
+					[2]int{
+						intervals[tstI][0],
+						intervals[i][1],
+					},
+				)
 
-	for _, v := range str {
-		buf = append(buf, v)
-		if len(buf) == 2 {
-			res = append(res, string(buf))
-			buf = []rune{}
+				//skip = intervals[i][1]
+
+				if tstI+1 < i {
+					r = append(
+						r,
+						intervals[tstI+1:i]...,
+					)
+				}
+
+				intervals = append(
+					r,
+					intervals[i+1:]...,
+				)
+
+				//j = 0
+				break
+			}
 		}
 	}
-
-	if len(buf) != 0 {
-		res = append(res, string(buf)+"_")
-	}
-
+	log.Println(intervals)
+	res := 0
 	return res
 }

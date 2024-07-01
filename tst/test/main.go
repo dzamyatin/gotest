@@ -118,8 +118,6 @@ func SumOfIntervals(intervals [][2]int) int {
 				continue
 			}
 
-			//1,2
-			//2,4
 			if intervals[currIntervalIndex][0] <= intervals[i][0] &&
 				intervals[currIntervalIndex][1] >= intervals[i][0] {
 				r := [][2]int{}

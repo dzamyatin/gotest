@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	_ "golang.org/x/sync/errgroup"
-	"log"
 	"sort"
 )
 
@@ -130,7 +129,6 @@ func SumOfIntervals(intervals [][2]int) int {
 					if currIntervalIndex > 0 {
 						r = append(
 							r,
-							//intervals[:currIntervalIndex-1]...,
 							intervals[:currIntervalIndex]...,
 						)
 					}
@@ -203,9 +201,8 @@ func SumOfIntervals(intervals [][2]int) int {
 			}
 		}
 	}
-	log.Println(intervals)
-	res := 0
 
+	res := 0
 	for _, v := range intervals {
 		res += v[1] - v[0]
 	}

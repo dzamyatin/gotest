@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	fmt.Println(Partitions(5))
@@ -8,33 +11,35 @@ func main() {
 
 func Partitions(n int) int {
 
+	m := make(map[string]struct{})
 	elem := make([]int, n)
-
-	curr := 0
 	res := 0
-	for i := 0; i < n; i++ {
-		for f := 0; f < n; f++ {
-			for j := 0; j < n; j++ {
-				if curr >= j {
-					elem[j]++
-				}
 
-				sum := 0
-				for _, v := range elem {
-					sum += v
-				}
+	fil(elem, 0, &res, m)
+	//fmt.Println(elem)
 
-				if sum == n {
-					res++
-					fmt.Println(elem)
-					break
-				}
-			}
+	return len(m)
+}
+
+func fil(elem []int, ps int, res *int, m map[string]struct{}) {
+	nps := ps + 1
+	for i := 0; i <= len(elem); i++ {
+		elem[ps] = i
+		if nps < len(elem) {
+			fil(elem, nps, res, m)
 		}
+		//fmt.Println(elem)
 
-		curr++
-		elem = make([]int, n)
+		s := 0
+		for _, v := range elem {
+			s += v
+		}
+		if s == len(elem) {
+			*res = *res + 1
+			e := make([]int, len(elem))
+			copy(e, elem)
+			sort.Ints(e)
+			m[fmt.Sprint(e)] = struct{}{}
+		}
 	}
-
-	return res
 }

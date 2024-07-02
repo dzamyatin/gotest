@@ -8,8 +8,8 @@ import (
 func main() {
 	//fmt.Println(Partitions(1))
 	//fmt.Println(Partitions(5))
-	//fmt.Println(Partitions(10))
-	fmt.Println(Partitions(25))
+	fmt.Println(Partitions(10))
+	//fmt.Println(Partitions(25))
 }
 
 func Partitions(n int) int {
@@ -27,7 +27,7 @@ func fil(elem []int, ps int, m map[string]struct{}) {
 	for i := len(elem); i >= 0; i-- {
 		elem[ps] = i
 
-		//fmt.Println(elem)
+		fmt.Println(elem)
 
 		s := sum(elem)
 

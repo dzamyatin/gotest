@@ -6,8 +6,10 @@ import (
 )
 
 func main() {
-	fmt.Println(Partitions(5))
-	//fmt.Println(Partitions(25))
+	//fmt.Println(Partitions(1))
+	//fmt.Println(Partitions(5))
+	//fmt.Println(Partitions(10))
+	fmt.Println(Partitions(25))
 }
 
 func Partitions(n int) int {

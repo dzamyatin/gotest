@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-	"sync"
-	"sync/atomic"
 	"time"
 )
 
@@ -13,10 +11,10 @@ import (
 func main() {
 	t := time.Now()
 	//fmt.Println(Partitions(1))
-	fmt.Println(Partitions(5))
-	fmt.Println(Partitions(10))
+	//fmt.Println(Partitions(5))
+	//fmt.Println(Partitions(10))
 	fmt.Println(Partitions(25))
-	fmt.Println(Partitions(40))
+	//fmt.Println(Partitions(40))
 	//fmt.Println(Partitions(100))
 
 	fmt.Println("ST", time.Now().Sub(t))
@@ -38,17 +36,14 @@ func Partitions(n int) int {
 }
 
 type Part struct {
-	sm     chan struct{}
-	wg     sync.WaitGroup
-	sum    atomic.Uint32
-	cycle  sync.Map
+	sum    int
+	cycle  map[string]struct{}
 	number int
 }
 
 func NewPart(number int) Part {
 	return Part{
-		sm:     make(chan struct{}, 10),
-		cycle:  sync.Map{},
+		cycle:  make(map[string]struct{}),
 		number: number,
 	}
 }
@@ -61,9 +56,8 @@ func (p *Part) run() int {
 	}
 
 	p.rec(m, 0, []int{})
-	p.wg.Wait()
-	close(p.sm)
-	return int(p.sum.Load())
+
+	return p.sum
 }
 
 func (p *Part) rec(m []int, cur int, path []int) {
@@ -78,21 +72,11 @@ func (p *Part) rec(m []int, cur int, path []int) {
 		}
 
 		if cur+v == len(m) {
-			p.sum.Add(1)
+			p.sum++
 			continue
 		}
 		if cur+v < len(m) {
-			if cur == 0 {
-				p.wg.Add(1)
-				p.sm <- struct{}{}
-				go func() {
-					p.rec(m, cur+v, newPath)
-					<-p.sm
-					p.wg.Done()
-				}()
-			} else {
-				p.rec(m, cur+v, newPath)
-			}
+			p.rec(m, cur+v, newPath)
 		}
 	}
 }
@@ -101,9 +85,13 @@ func (p *Part) overfull(r []int) bool {
 	sort.Ints(r)
 	k := fmt.Sprint(r)
 
-	_, loaded := p.cycle.LoadOrStore(k, struct{}{})
+	if _, ok := p.cycle[k]; ok {
+		return true
+	}
 
-	return loaded
+	p.cycle[k] = struct{}{}
+
+	return false
 }
 
 ///---------------------------------------------

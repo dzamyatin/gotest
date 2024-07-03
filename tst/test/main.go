@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-//var stat int
-
 func main() {
 	f, _ := os.Create("cpu.prof")
 	err := pprof.StartCPUProfile(f)
@@ -26,10 +24,10 @@ func main() {
 
 	t := time.Now()
 	//fmt.Println(Partitions(1))
-	//fmt.Println(Partitions(5))
+	fmt.Println(Partitions(5))
 	//fmt.Println(Partitions(10))
 	//fmt.Println(Partitions(25))
-	fmt.Println(Partitions(40))
+	//fmt.Println(Partitions(40))
 	//fmt.Println(Partitions(50))
 	//fmt.Println(Partitions(100))
 
@@ -102,18 +100,18 @@ func (p *Part) rec(m []int, cur int, path []int) {
 func (p *Part) overfull(r []int) bool {
 	sort.Ints(r)
 
-	var b []byte
+	var b = make([]byte, 0, 100)
 	for _, v := range r {
 		b = append(b, byte(v))
 	}
 
-	k := string(b)
+	key := string(b)
 
-	if _, ok := p.cycle[k]; ok {
+	if _, ok := p.cycle[key]; ok {
 		return true
 	}
 
-	p.cycle[k] = struct{}{}
+	p.cycle[key] = struct{}{}
 
 	return false
 }

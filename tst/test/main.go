@@ -36,17 +36,15 @@ func Partitions(n int) int {
 }
 
 type Part struct {
-	sum     int
-	storage map[string]struct{}
-	cycle   map[string]struct{}
-	number  int
+	sum    int
+	cycle  map[string]struct{}
+	number int
 }
 
 func NewPart(number int) Part {
 	return Part{
-		storage: make(map[string]struct{}),
-		cycle:   make(map[string]struct{}),
-		number:  number,
+		cycle:  make(map[string]struct{}),
+		number: number,
 	}
 }
 

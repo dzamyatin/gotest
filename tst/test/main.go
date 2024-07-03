@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	//debug.SetGCPercent(-1)
+
 	f, _ := os.Create("cpu.prof")
 	err := pprof.StartCPUProfile(f)
 	if err != nil {
@@ -91,7 +93,7 @@ func (p *Part) rec(m map[int]int, cur int, path []int) {
 	}
 
 	for k, v := range m {
-		if v < 0 {
+		if v <= 0 {
 			continue
 		}
 

@@ -6,11 +6,15 @@ import (
 	"sort"
 )
 
+var stat = 0
+
 func main() {
 	//fmt.Println(Partitions(1))
-	//fmt.Println(Partitions(5))
-	fmt.Println(Partitions(10))
+	fmt.Println(Partitions(5))
+	//fmt.Println(Partitions(10))
 	//fmt.Println(Partitions(25))
+
+	fmt.Printf("ST:%v", stat)
 }
 
 // [5], [4,1], [3,2], [3,1,1], [2,2,1], [2,1,1,1], [1,1,1,1,1]
@@ -50,11 +54,12 @@ func Partitions(n int) int {
 }
 
 func rec(elem []int, m map[string]struct{}, g int, flag bool) {
+	stat++
 	for i := 1; i <= len(elem); i++ {
 		r := conv(elem, i, g)
 		store(r, m)
 
-		if len(r) != len(elem) || flag {
+		if len(r)+g >= i && (len(r) != len(elem) || flag) {
 			for j := 0; j <= len(elem); j++ {
 				rec(r, m, j, false)
 			}

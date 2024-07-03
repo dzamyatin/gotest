@@ -3,17 +3,21 @@ package main
 import (
 	"fmt"
 	"sort"
+	"time"
 )
 
 //var stat int
 
 func main() {
+	t := time.Now()
 	//fmt.Println(Partitions(1))
 	//fmt.Println(Partitions(5))
 	//fmt.Println(Partitions(10))
-	//fmt.Println(Partitions(25))
-	fmt.Println(Partitions(40))
+	fmt.Println(Partitions(25))
+	//fmt.Println(Partitions(40))
 	//fmt.Println(Partitions(100))
+
+	fmt.Println("ST", time.Now().Sub(t))
 	//
 	//fmt.Println("ST", stat)
 }
@@ -70,24 +74,13 @@ func (p *Part) rec(m []int, cur int, path []int) {
 		}
 
 		if cur+v == len(m) {
-			p.store(newPath)
+			p.sum++
 			continue
 		}
 		if cur+v < len(m) {
 			p.rec(m, cur+v, newPath)
 		}
 	}
-}
-
-func (p *Part) store(r []int) {
-	sort.Ints(r)
-	k := fmt.Sprint(r)
-	if _, ok := p.storage[k]; ok {
-		return
-	}
-	//fmt.Println(r)
-	p.storage[k] = struct{}{}
-	p.sum++
 }
 
 func (p *Part) overfull(r []int) bool {

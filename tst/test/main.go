@@ -28,9 +28,9 @@ func main() {
 	//fmt.Println(Partitions(1))
 	//fmt.Println(Partitions(5))
 	//fmt.Println(Partitions(10))
-	//fmt.Println(Partitions(25))
+	fmt.Println(Partitions(25))
 	//fmt.Println(Partitions(40))
-	fmt.Println(Partitions(50))
+	//fmt.Println(Partitions(50))
 	//fmt.Println(Partitions(100))
 
 	fmt.Println("ST", time.Now().Sub(t))
@@ -75,10 +75,10 @@ func NewPart(number int) Part {
 }
 
 func (p *Part) run() int {
-	m := make(map[int]int, p.number)
+	m := make([]int, p.number)
 
 	for i := 1; i <= p.number; i++ {
-		m[i] = p.number / i
+		m[i-1] = p.number / i
 	}
 
 	p.rec(m, 0, []int{})
@@ -86,13 +86,14 @@ func (p *Part) run() int {
 	return p.sum
 }
 
-func (p *Part) rec(m map[int]int, cur int, path []int) {
-	nm := make(map[int]int, p.number)
+func (p *Part) rec(m []int, cur int, path []int) {
+	var nm = make([]int, len(m))
 	for k := range m {
 		nm[k] = m[k] - 1
 	}
 
 	for k, v := range m {
+		f := k + 1
 		if v <= 0 {
 			continue
 		}
@@ -100,18 +101,18 @@ func (p *Part) rec(m map[int]int, cur int, path []int) {
 		newPath := make([]int, len(path))
 
 		copy(newPath, path)
-		newPath = append(newPath, k)
+		newPath = append(newPath, f)
 
 		if p.overfull(newPath) {
 			continue
 		}
 
-		if cur+k == len(m) {
+		if cur+f == len(m) {
 			p.sum++
 			continue
 		}
-		if cur+k < len(m) {
-			p.rec(nm, cur+k, newPath)
+		if cur+f < len(m) {
+			p.rec(nm, cur+f, newPath)
 		}
 	}
 }

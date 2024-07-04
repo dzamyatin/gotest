@@ -10,8 +10,6 @@ import (
 )
 
 func main() {
-	//debug.SetGCPercent(-1)
-
 	f, _ := os.Create("cpu.prof")
 	err := pprof.StartCPUProfile(f)
 	if err != nil {
@@ -103,11 +101,7 @@ func (p *Part) rec(m []int, cur int, path []int) {
 			continue
 		}
 
-		//newPath := make([]int, len(path)+1)
-		//copy(newPath, path)
 		newPath[len(path)] = f
-
-		//fmt.Println(newPath)
 
 		if p.overfull(newPath) {
 			continue
@@ -124,8 +118,6 @@ func (p *Part) rec(m []int, cur int, path []int) {
 }
 
 func (p *Part) overfull(r []int) bool {
-	//sort.Ints(r)
-
 	var b = make([]byte, 0, 100)
 	for _, v := range r {
 		b = append(b, byte(v))

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 	"runtime/pprof"
-	"sort"
+	"slices"
 	"time"
 )
 
@@ -30,7 +30,9 @@ func main() {
 	//fmt.Println(Partitions(10))
 	//fmt.Println(Partitions(25))
 	//fmt.Println(Partitions(40))
-	fmt.Println(Partitions(50))
+	//fmt.Println(Partitions(50))
+	fmt.Println(Partitions(61))
+	//fmt.Println(Partitions(71))
 	//fmt.Println(Partitions(100))
 
 	fmt.Println("ST", time.Now().Sub(t))
@@ -92,16 +94,20 @@ func (p *Part) rec(m []int, cur int, path []int) {
 		nm[k] = m[k] - 1
 	}
 
+	newPath := make([]int, len(path)+1)
+	copy(newPath, path)
+
 	for k, v := range m {
 		f := k + 1
 		if v <= 0 {
 			continue
 		}
 
-		newPath := make([]int, len(path))
+		//newPath := make([]int, len(path)+1)
+		//copy(newPath, path)
+		newPath[len(path)] = f
 
-		copy(newPath, path)
-		newPath = append(newPath, f)
+		//fmt.Println(newPath)
 
 		if p.overfull(newPath) {
 			continue
@@ -118,12 +124,24 @@ func (p *Part) rec(m []int, cur int, path []int) {
 }
 
 func (p *Part) overfull(r []int) bool {
-	sort.Ints(r)
+	//sort.Ints(r)
 
 	var b = make([]byte, 0, 100)
 	for _, v := range r {
 		b = append(b, byte(v))
 	}
+
+	slices.SortFunc(b, func(a, b byte) int {
+		if a < b {
+			return -1
+		}
+
+		if a > b {
+			return 1
+		}
+
+		return 0
+	})
 
 	key := string(b)
 
@@ -135,36 +153,5 @@ func (p *Part) overfull(r []int) bool {
 
 	return false
 }
-
-//func (p *Part) overfull(r []int) bool {
-//	sort.Ints(r)
-//
-//	b := strings.Builder{}
-//	for _, v := range r {
-//		b.WriteByte(byte(v))
-//	}
-//	k := b.String()
-//
-//	if _, ok := p.cycle[k]; ok {
-//		return true
-//	}
-//
-//	p.cycle[k] = struct{}{}
-//
-//	return false
-//}
-
-//func (p *Part) overfull(r []int) bool {
-//	sort.Ints(r)
-//	k := fmt.Sprint(r)
-//
-//	if _, ok := p.cycle[k]; ok {
-//		return true
-//	}
-//
-//	p.cycle[k] = struct{}{}
-//
-//	return false
-//}
 
 ///---------------------------------------------

@@ -5,11 +5,19 @@ import (
 	"log"
 	"os"
 	"runtime/pprof"
-	"slices"
+	"sort"
 	"time"
 )
 
 func main() {
+	//debug.SetGCPercent(-1)
+
+	//fmt.Println(
+	//
+	//)
+	//
+	//return
+
 	f, _ := os.Create("cpu.prof")
 	err := pprof.StartCPUProfile(f)
 	if err != nil {
@@ -24,12 +32,12 @@ func main() {
 
 	t := time.Now()
 	//fmt.Println(Partitions(1))
-	//fmt.Println(Partitions(5))
+	fmt.Println(Partitions(5))
 	//fmt.Println(Partitions(10))
 	//fmt.Println(Partitions(25))
 	//fmt.Println(Partitions(40))
 	//fmt.Println(Partitions(50))
-	fmt.Println(Partitions(61))
+	//fmt.Println(Partitions(61))
 	//fmt.Println(Partitions(71))
 	//fmt.Println(Partitions(100))
 
@@ -103,6 +111,8 @@ func (p *Part) rec(m []int, cur int, path []int) {
 
 		newPath[len(path)] = f
 
+		fmt.Println(newPath)
+
 		if p.overfull(newPath) {
 			continue
 		}
@@ -123,17 +133,12 @@ func (p *Part) overfull(r []int) bool {
 		b = append(b, byte(v))
 	}
 
-	slices.SortFunc(b, func(a, b byte) int {
-		if a < b {
-			return -1
-		}
-
-		if a > b {
-			return 1
-		}
-
-		return 0
-	})
+	sort.Slice(
+		b,
+		func(i, j int) bool {
+			return b[i] > b[j]
+		},
+	)
 
 	key := string(b)
 

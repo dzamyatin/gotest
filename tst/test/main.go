@@ -64,6 +64,11 @@ func main() {
 // [2,1,1,1],
 // [1,1,1,1,1]
 
+//1, 1
+//1, 2, 1
+
+//2, 1, 1
+
 func Partitions(n int) int {
 	np := NewPart(n)
 	return np.run()
@@ -88,7 +93,7 @@ func (p *Part) run() int {
 	for i := 1; i <= p.number; i++ {
 		m[i-1] = p.number / i
 	}
-
+	fmt.Println(m)
 	p.rec(m, 0, []int{})
 
 	return p.sum
@@ -111,7 +116,7 @@ func (p *Part) rec(m []int, cur int, path []int) {
 
 		newPath[len(path)] = f
 
-		fmt.Println(newPath)
+		//fmt.Println(newPath)
 
 		if p.overfull(newPath) {
 			continue
